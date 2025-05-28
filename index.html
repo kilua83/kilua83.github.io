@@ -75,56 +75,6 @@
         #navbar {
             transition: top 0.3s;
         }
-        /* Modal styles */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 100; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; /* Could be more or less, depending on screen size */
-            max-width: 600px;
-            border-radius: 0.5rem;
-            position: relative;
-        }
-        .close-button {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-        }
-        .close-button:hover,
-        .close-button:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: #09f;
-            animation: spin 1s ease infinite;
-            margin-right: 10px;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -148,7 +98,6 @@
                 <a href="#contact" class="text-gray-700 hover:text-blue-600 font-medium">Contatti</a>
                 <a href="#experience" class="text-gray-700 hover:text-blue-600 font-medium">Esperienze</a>
                 <a href="#projects" class="text-gray-700 hover:text-blue-600 font-medium">Progetti</a>
-                <a href="#ai-assistant" class="text-gray-700 hover:text-blue-600 font-medium">Assistente IA ✨</a>
                 <a href="#education" class="text-gray-700 hover:text-blue-600 font-medium">Formazione</a>
                 <a href="#skills" class="text-gray-700 hover:text-blue-600 font-medium">Competenze</a>
                 <a href="#certifications" class="text-gray-700 hover:text-blue-600 font-medium">Certificazioni</a>
@@ -297,7 +246,7 @@
                         <span class="tag">Veeam B&R 12</span><span class="tag">Azure</span><span class="tag">VPN</span><span class="tag">vSphere</span>
                     </div>
                 </div>
-                 <div class="card">
+                <div class="card">
                     <h3 class="text-xl font-semibold text-blue-700 mb-1">Creation of the entire Infrastructure of "Ospedale Vanvitelli Primo Policlinico" in Canonical Openstack Cloud</h3>
                     <p class="text-sm text-gray-500 italic mb-2">Marzo 2019 – Dicembre 2023</p>
                     <p class="text-gray-700 mb-3">Definizione delle specifiche di progetto e implementazione dell'infrastruttura Cloud per migrare tutte le infrastrutture fisiche in virtuali. Progettazione, implementazione e gestione del Firewall virtuale (Fortinet).</p>
@@ -403,29 +352,6 @@
                 </div>
             </div>
         </section>
-
-        <section id="ai-assistant" class="mb-12 scroll-mt-20">
-            <h2 class="section-title">Assistente IA per Lettera di Presentazione ✨</h2>
-            <div class="card">
-                <p class="text-gray-700 mb-4">
-                    Incolla qui sotto la descrizione del lavoro per cui ti stai candidando. L'assistente IA utilizzerà le informazioni della sezione "Chi Sono" e questa descrizione per aiutarti a generare una bozza di paragrafo per la tua lettera di presentazione.
-                </p>
-                <textarea id="jobDescription" class="w-full h-40 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out" placeholder="Incolla qui la descrizione del lavoro..."></textarea>
-                <button id="generateDraftButton" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:shadow-lg transition duration-150 ease-in-out flex items-center justify-center">
-                    <span id="buttonText">Genera Bozza con IA ✨</span>
-                    <div id="loadingSpinner" class="spinner" style="display: none;"></div>
-                </button>
-            </div>
-        </section>
-
-        <div id="aiOutputModal" class="modal">
-            <div class="modal-content">
-                <span class="close-button" id="closeModalButton">&times;</span>
-                <h3 id="modalTitle" class="text-xl font-semibold text-blue-700 mb-3"></h3>
-                <div id="modalBody" class="text-gray-700 whitespace-pre-wrap"></div>
-            </div>
-        </div>
-
 
         <section id="education" class="mb-12 scroll-mt-20">
             <h2 class="section-title">Formazione</h2>
@@ -539,102 +465,6 @@
             }
             lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
         });
-
-        // AI Assistant Logic
-        const generateDraftButton = document.getElementById('generateDraftButton');
-        const jobDescriptionTextarea = document.getElementById('jobDescription');
-        const aboutMeTextElement = document.getElementById('about-me-text');
-        const aiOutputModal = document.getElementById('aiOutputModal');
-        const closeModalButton = document.getElementById('closeModalButton');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalBody = document.getElementById('modalBody');
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        const buttonText = document.getElementById('buttonText');
-
-        function showModal(title, message) {
-            if (modalTitle) modalTitle.textContent = title;
-            if (modalBody) modalBody.textContent = message;
-            if (aiOutputModal) aiOutputModal.style.display = "block";
-        }
-
-        function hideModal() {
-            if (aiOutputModal) aiOutputModal.style.display = "none";
-        }
-
-        if (closeModalButton) {
-            closeModalButton.onclick = hideModal;
-        }
-        
-        // Close modal if user clicks outside of it
-        window.onclick = function(event) {
-            if (event.target == aiOutputModal) {
-                hideModal();
-            }
-        }
-
-        if (generateDraftButton) {
-            generateDraftButton.addEventListener('click', async () => {
-                const jobDescription = jobDescriptionTextarea ? jobDescriptionTextarea.value.trim() : "";
-                const aboutMe = aboutMeTextElement ? aboutMeTextElement.innerText.trim() : "";
-
-                if (!jobDescription) {
-                    showModal("Errore", "Per favore, incolla una descrizione del lavoro.");
-                    return;
-                }
-                if (!aboutMe) {
-                    showModal("Errore", "Impossibile trovare la sezione 'Chi Sono'. Assicurati che esista e abbia un ID 'about-me-text'.");
-                    return;
-                }
-
-                // Show spinner and disable button
-                if (loadingSpinner) loadingSpinner.style.display = 'inline-block';
-                if (buttonText) buttonText.textContent = 'Generazione...';
-                generateDraftButton.disabled = true;
-
-                const prompt = `Basandoti sulla seguente descrizione della persona (sezione "Chi Sono" del suo CV):\n"${aboutMe}"\n\nE sulla seguente descrizione del lavoro:\n"${jobDescription}"\n\nScrivi un breve paragrafo introduttivo (massimo 3-4 frasi) per una lettera di presentazione. Il paragrafo deve essere professionale, conciso e mettere in evidenza come le caratteristiche e le esperienze della persona siano in linea con i requisiti del lavoro. Inizia direttamente con il testo della lettera, senza frasi come "Ecco un paragrafo:" o simili. Parla in prima persona, come se fossi il candidato.`;
-
-                try {
-                    let chatHistory = [];
-                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                    const payload = { contents: chatHistory };
-                    const apiKey = ""; // API key will be handled by the environment
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-                    
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        console.error("API Error:", errorData);
-                        throw new Error(`Errore dall'API Gemini: ${errorData?.error?.message || response.status}`);
-                    }
-
-                    const result = await response.json();
-
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        const generatedText = result.candidates[0].content.parts[0].text;
-                        showModal("Bozza Generata con IA ✨", generatedText);
-                    } else {
-                        console.error("Unexpected API response structure:", result);
-                        throw new Error("La risposta dell'API non contiene il testo generato o ha una struttura inattesa.");
-                    }
-
-                } catch (error) {
-                    console.error("Errore durante la generazione della bozza:", error);
-                    showModal("Errore", `Si è verificato un errore: ${error.message}. Controlla la console per maggiori dettagli.`);
-                } finally {
-                    // Hide spinner and re-enable button
-                    if (loadingSpinner) loadingSpinner.style.display = 'none';
-                    if (buttonText) buttonText.textContent = 'Genera Bozza con IA ✨';
-                    if (generateDraftButton) generateDraftButton.disabled = false;
-                }
-            });
-        }
 
     </script>
 
