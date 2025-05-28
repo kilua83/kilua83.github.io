@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curriculum Vitae - Antonio Di Gennaro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #374151; /* Grigio scuro per il testo */
+        }
+        .section-title {
+            border-bottom: 2px solid #3b82f6; /* Blu */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1e3a8a; /* Blu scuro */
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tag {
+            background-color: #e0e7ff; /* Blu molto chiaro */
+            color: #3730a3; /* Blu indaco */
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        .icon {
+            margin-right: 0.5rem;
+            color: #3b82f6; /* Blu */
+        }
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); /* Gradiente blu */
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 2.5rem; /* Spazio per l'icona e la linea */
+            padding-bottom: 1.5rem;
+            border-left: 2px solid #93c5fd; /* Blu chiaro per la linea verticale */
+        }
+        .timeline-item:last-child {
+            border-left: 2px solid transparent; /* Nasconde l'ultima linea */
+            padding-bottom: 0;
+        }
+        .timeline-icon {
+            position: absolute;
+            left: -0.75rem; /* Centra l'icona sulla linea */
+            top: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background-color: #3b82f6; /* Blu */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #navbar {
+            transition: top 0.3s;
+        }
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 100; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 600px;
+            border-radius: 0.5rem;
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #09f;
+            animation: spin 1s ease infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <header class="text-white p-6 md:p-10 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+            <div class="text-center md:text-left mb-6 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold">Antonio Di Gennaro</h1>
+                <p class="text-xl md:text-2xl text-blue-200">ICT Project Manager & Systems Specialist</p>
+            </div>
+            <div class="flex-shrink-0">
+                <img src="https://placehold.co/150x150/3B82F6/FFFFFF?text=ADG&font=inter" alt="Foto di Antonio Di Gennaro" class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-blue-300 object-cover">
+            </div>
+        </div>
+    </header>
+
+    <nav id="navbar" class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-2 md:space-y-0 md:space-x-6">
+                <a href="#about" class="text-gray-700 hover:text-blue-600 font-medium">Chi Sono</a>
+                <a href="#contact" class="text-gray-700 hover:text-blue-600 font-medium">Contatti</a>
+                <a href="#experience" class="text-gray-700 hover:text-blue-600 font-medium">Esperienze</a>
+                <a href="#projects" class="text-gray-700 hover:text-blue-600 font-medium">Progetti</a>
+                <a href="#ai-assistant" class="text-gray-700 hover:text-blue-600 font-medium">Assistente IA ✨</a>
+                <a href="#education" class="text-gray-700 hover:text-blue-600 font-medium">Formazione</a>
+                <a href="#skills" class="text-gray-700 hover:text-blue-600 font-medium">Competenze</a>
+                <a href="#certifications" class="text-gray-700 hover:text-blue-600 font-medium">Certificazioni</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-6">
+
+        <section id="about" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Chi Sono</h2>
+            <div class="card">
+                <div id="about-me-text">
+                    <p class="text-lg leading-relaxed">
+                        Personalità grintosa, intraprendente, versatile, spiccata capacità di stabilire rapporti interpersonali, voglia di portare a termine il proprio lavoro con determinazione e successo. Spirito di squadra.
+                    </p>
+                    <p class="mt-4 text-lg leading-relaxed">
+                        Progettista, analista e responsabile della gestione di sistemi e infrastrutture. Configurazione di architetture complesse enterprise, multilayer distribuite e cloud in molteplici contesti.
+                    </p>
+                    <p class="mt-4 text-lg leading-relaxed">
+                        Le mie principali esperienze si sono concentrate sulla gestione delle attività di assessment infrastrutturale, integrazioni all'interno di infrastrutture backend complesse e ad alta disponibilità, progettazione e gestione di Sistemi di Intercettazione Legale sia nei normali flussi di governance che in sprint evolutivi. Ho anche esperienze con diverse categorie di clustering di sistemi multilayer (server on-premise e cloud). Il mio know-how copre la maggior parte delle piattaforme cloud, in termini di attività di progettazione e configurazione, sia IaaS che PaaS.
+                    </p>
+                </div>
+                <p class="mt-4 text-lg font-semibold">Principali Clienti: CNH, IBM, ENEL, Ospedale Pascale, Ospedale Vanvitelli, GOODYEAR, Bulgari, Carpisa/Yamamay, Procura di Roma e Salerno, Axa, IPZS.</p>
+            </div>
+        </section>
+
+        <section id="contact" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Contatti</h2>
+            <div class="card">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-lg mb-2"><i class="fas fa-map-marker-alt icon"></i>Via della Libertà, 140 - 80010 Villaricca (NA), Italia</p>
+                        <p class="text-lg mb-2"><i class="fas fa-phone icon"></i>(+39) 3490675187</p>
+                    </div>
+                    <div>
+                        <p class="text-lg mb-2"><i class="fas fa-envelope icon"></i><a href="mailto:digennaroantonio@gmail.com" class="text-blue-600 hover:underline">digennaroantonio@gmail.com</a></p>
+                        <p class="text-lg mb-2"><i class="fab fa-linkedin icon"></i><a href="https://www.linkedin.com/in/antonio-di-gennaro-5815903b/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Profilo LinkedIn</a></p>
+                    </div>
+                </div>
+                 <p class="mt-4 text-sm text-gray-600">Data di nascita: 8 Luglio 1983</p>
+                 <p class="text-sm text-gray-600">Nazionalità: Italiana</p>
+            </div>
+        </section>
+
+        <section id="experience" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Esperienze Lavorative</h2>
+            <div class="space-y-8">
+                <div class="card">
+                    <div class="timeline-item">
+                        <div class="timeline-icon"><i class="fas fa-briefcase"></i></div>
+                        <h3 class="text-xl font-semibold text-blue-700">ICT Project Manager</h3>
+                        <p class="text-md text-gray-600">System Management SPA | Napoli, Italia</p>
+                        <p class="text-sm text-gray-500 italic">Novembre 2019 – Attuale</p>
+                        <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
+                            <li>Project Manager and Infrastructure Team Leader</li>
+                            <li>Managed Services</li>
+                            <li>Azure specialist</li>
+                            <li>System Administrator</li>
+                            <li>Server Management (Linux e Windows)</li>
+                            <li>Clustered services in Cloud Environments</li>
+                            <li>VMware vSphere Specialist</li>
+                            <li>Switching, Routing, Fortigate Firewall</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                     <div class="timeline-item">
+                        <div class="timeline-icon"><i class="fas fa-briefcase"></i></div>
+                        <h3 class="text-xl font-semibold text-blue-700">Systems Specialist</h3>
+                        <p class="text-md text-gray-600">System Management SPA | Napoli, Italia</p>
+                        <p class="text-sm text-gray-500 italic">Dicembre 2014 – Novembre 2019</p>
+                        <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
+                            <li>Information systems management</li>
+                            <li>System administrator</li>
+                            <li>Server Management (both Linux and Windows Server)</li>
+                            <li>VMWare vSphere Configuration and Administration (including vCenter clustered services)</li>
+                            <li>Cloud Services implementation (Azure, AWS, Openstack)</li>
+                            <li>Critical Multimedia Informations Managing Systems, in Lawful Interceptions scenarios</li>
+                            <li>Switching, Routing, Cisco ASA Firewall</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                     <div class="timeline-item">
+                        <div class="timeline-icon"><i class="fas fa-briefcase"></i></div>
+                        <h3 class="text-xl font-semibold text-blue-700">ICT System Administrator</h3>
+                        <p class="text-md text-gray-600">Tecnosoft Software Agency | Napoli, Italia</p>
+                        <p class="text-sm text-gray-500 italic">Marzo 2010 – Novembre 2014</p>
+                        <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
+                            <li>VMWare System Management</li>
+                            <li>Software Administration</li>
+                            <li>Server Configuration and Administration</li>
+                            <li>Mail services</li>
+                            <li>Linux (RedHat/CentOS - SLES) / Windows Servers</li>
+                            <li>MySQL and PostgreSQL</li>
+                            <li>Technical Support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Progetti Rilevanti</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Polo Strategico Nazionale - Infrastructure design and creation for Federico II and Vanvitelli</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Aprile 2024 – Attuale</p>
+                    <p class="text-gray-700 mb-3">Creazione dell'intero layer infrastrutturale (Sistema e Rete) in PSN per fungere da catalizzatore nel processo di trasformazione digitale, promuovendo l'innovazione e l'integrazione infrastrutturale a livello nazionale.</p>
+                    <p class="font-semibold text-gray-800">Obiettivi:</p>
+                    <ul class="list-disc list-inside text-gray-700 text-sm mb-3">
+                        <li>Stabilire una rete infrastrutturale robusta e scalabile.</li>
+                        <li>Incoraggiare la collaborazione per accelerare lo sviluppo di soluzioni innovative.</li>
+                         <li>Ridurre il digital divide e promuovere l'accesso equo alla tecnologia.</li>
+                         <li>Implementazione di una piattaforma integrata per la gestione e l'analisi dei dati.</li>
+                         <li>Sviluppo di progetti pilota per testare nuove tecnologie.</li>
+                    </ul>
+                    <p class="font-semibold text-gray-800">Competenze:</p>
+                    <div>
+                        <span class="tag">Network File System (NFS)</span><span class="tag">Networking</span><span class="tag">Active Directory</span><span class="tag">VMware vSphere</span><span class="tag">IaaS</span><span class="tag">Linux System Administration</span><span class="tag">PaaS</span><span class="tag">Windows Server</span><span class="tag">Vcloud</span><span class="tag">BaaS</span><span class="tag">Firewall</span><span class="tag">DRaaS</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Active Directory synchronization with Azure Entra ID</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Gennaio 2024 – Aprile 2024</p>
+                    <p class="text-gray-700 mb-3">Implementazione di una soluzione di sincronizzazione tra Active Directory on-premises e Azure Entra ID per garantire una gestione degli accessi sicura e centralizzata.</p>
+                     <p class="font-semibold text-gray-800">Obiettivi:</p>
+                    <ul class="list-disc list-inside text-gray-700 text-sm mb-3">
+                        <li>Integrazione fluida di Active Directory con Azure Entra ID.</li>
+                        <li>Sicurezza migliorata con autenticazione multi-fattore e policy di accesso condizionale.</li>
+                         <li>Automazione dei processi di onboarding e offboarding dei dipendenti.</li>
+                    </ul>
+                    <p class="font-semibold text-gray-800">Competenze:</p>
+                    <div>
+                        <span class="tag">Active Directory</span><span class="tag">Microsoft 365</span><span class="tag">Azure Entra ID</span><span class="tag">Azure</span><span class="tag">Azure Entra Connect</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Disaster Recovery of an on-premise environment on Azure cloud infrastructure</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Marzo 2023 – Dicembre 2023</p>
+                    <p class="text-gray-700 mb-3">Configurazione e piano di disaster recovery tramite Veeam Backup and Replication 12. Backup di VM in ambiente vSphere on-premise su Azure blob storage. Creazione VPN site-to-site per la raggiungibilità dell'ambiente cloud in caso di attivazione DR.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> Senior IT Architect and operations</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie:</p>
+                    <div>
+                        <span class="tag">Veeam B&R 12</span><span class="tag">Azure</span><span class="tag">VPN</span><span class="tag">vSphere</span>
+                    </div>
+                </div>
+                 <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Creation of the entire Infrastructure of "Ospedale Vanvitelli Primo Policlinico" in Canonical Openstack Cloud</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Marzo 2019 – Dicembre 2023</p>
+                    <p class="text-gray-700 mb-3">Definizione delle specifiche di progetto e implementazione dell'infrastruttura Cloud per migrare tutte le infrastrutture fisiche in virtuali. Progettazione, implementazione e gestione del Firewall virtuale (Fortinet).</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> Senior IT Architect and operations</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie:</p>
+                    <div>
+                        <span class="tag">Openstack</span><span class="tag">Linux/Windows servers</span><span class="tag">Routing</span><span class="tag">Fortigate Firewall</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">IPZS Consultant and system support</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Maggio 2021 – Marzo 2023</p>
+                    <p class="text-gray-700 mb-3">Supporto sistemistico su ambienti di sviluppo, test, pre-produzione e produzione. I deployment e i rilasci vengono eseguiti tramite playbook ansible, configurando web server e application server.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> senior specialist and operations</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie:</p>
+                    <div>
+                        <span class="tag">apache proxy httpd</span><span class="tag">tomcat</span><span class="tag">TLS certificates</span><span class="tag">ansible</span><span class="tag">git</span><span class="tag">docker</span><span class="tag">Shibboleth IdP/SP</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Nagios XI Capacity Plan</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Settembre 2022 – Marzo 2023</p>
+                    <p class="text-gray-700 mb-3">Creazione del sistema di monitoraggio basato su Nagios XI per il monitoraggio dei servizi on-premise e cloud; gestione e configurazione del sistema di capacity plan per la previsione del consumo di risorse. Customizzazione tramite l'uso delle API Nagios di una dashboard contenente dati storici e previsionali secondo le specifiche del cliente.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> Project Manager and Team leader</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie:</p>
+                    <div>
+                        <span class="tag">Nagios XI</span><span class="tag">Embedded Capacity Planning feature</span><span class="tag">NCPA Agent</span><span class="tag">Nagios api</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Creation and management of VMWare vCloud Apps in cloud environment</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Giugno 2019 – Dicembre 2021</p>
+                    <p class="text-gray-700 mb-3">Definizione e implementazione dell'infrastruttura Cloud in ambiente vCloud Director per applicazioni web e mobile in configurazione cluster. Gestione della rete e sicurezza delle applicazioni cloud.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> Senior IT Architect and operations</p>
+                    <p class="font-semibold text-gray-800 mt-2">Competenze:</p>
+                    <div>
+                        <span class="tag">VMware vSphere</span><span class="tag">Linux System Administration</span><span class="tag">Windows Server</span><span class="tag">Vcloud</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Creation of the entire Infrastructure of "Istituto Nazionale Tumori IRCCS Fondazione Pascale" in Canonical Openstack Cloud</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Gennaio 2018 – Dicembre 2019</p>
+                    <p class="text-gray-700 mb-3">Definizione delle specifiche di progetto e implementazione dell'infrastruttura Cloud per migrare tutte le infrastrutture fisiche in virtuali. Implementazione di piani di migrazione e implementazione di migrazioni di sistemi "on premise" al sistema "cloud". Progettazione, implementazione e gestione del Firewall virtuale (Fortinet) provisionato sul Cloud.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> Senior IT Architect and operations</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie:</p>
+                    <div>
+                        <span class="tag">Openstack</span><span class="tag">Linux/Windows servers</span><span class="tag">deployed services</span><span class="tag">Routing</span><span class="tag">Fortigate Firewall</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Shibboleth Service Provider integration with Microsoft ADFS Identity Provider using SAML Protocol</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Ottobre 2017 – Marzo 2018</p>
+                    <p class="text-gray-700 mb-3">Integrazione SAML ADFS all'interno di infrastrutture backend complesse e ad alta disponibilità.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> senior analyst and operations</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie:</p>
+                    <div>
+                        <span class="tag">Shibboleth</span><span class="tag">WebServer Apache</span><span class="tag">php</span><span class="tag">xml</span><span class="tag">MS Active Directory Federation Services</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Nagios Monitoring of Critical Multimedia Information Managing Systems, in Lawful Interceptions scenarios</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Settembre 2016 – Dicembre 2018</p>
+                    <p class="text-gray-700 mb-3">Implementazione del sistema di monitoraggio Nagios su piattaforme business critical.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> senior specialist and operations</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie:</p>
+                    <div>
+                        <span class="tag">WebServer Apache</span><span class="tag">Nagios</span><span class="tag">xml</span><span class="tag">bash scripting</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Migration of Lawful Interception System</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Agosto 2016 – Dicembre 2016</p>
+                    <p class="text-gray-700 mb-3">Migrazione dell'intera piattaforma (server e servizi) a una nuova infrastruttura per la gestione del processo di manutenzione.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> specialist and operations</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie:</p>
+                    <div>
+                        <span class="tag">VMWare vCenter</span><span class="tag">vSwitch</span><span class="tag">Networking</span><span class="tag">IBM DS Series Storage</span><span class="tag">IBM v3700 Storage</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Clustering of mobile services in cloud environments</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Settembre 2015 – Dicembre 2017</p>
+                    <p class="text-gray-700 mb-3">Creazione e implementazione di un sistema di clustering per servizi mobili su ambienti Linux. Gestione di servizi basati su cloud (piattaforma SmartShop), relativi a scenari B2B e B2C.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> specialist, operations and maintenance</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie:</p>
+                    <div>
+                        <span class="tag">IBM WebSphere</span><span class="tag">IBM MobileFirst Platform</span><span class="tag">Keepalived</span><span class="tag">HAProxy</span><span class="tag">Apache Proxy</span><span class="tag">Apache LoadBalancer</span><span class="tag">Galera MariaDB</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Virtualization of software systems</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Marzo 2012 – Luglio 2014</p>
+                    <ul class="list-disc list-inside text-gray-700 text-sm mb-3">
+                        <li>Sistema VOIP che elimina fisicamente il centralino aziendale e con esso tutti i costi di manutenzione e aggiornamento. Tutte le funzionalità integrate nel servizio includono un risponditore automatico IVR, segreteria telefonica con possibilità di invio audio via email, trasferimento, videoconferenza, gestione conversazioni multiple.</li>
+                        <li>Gestione di e-mail, calendari, appuntamenti privati o condivisi, rubriche, attività, fax e documenti privati o condivisi.</li>
+                        <li>Gestione centralizzata dei documenti in tempo reale con altri utenti.</li>
+                    </ul>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> operations and maintenance</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie:</p>
+                    <div>
+                        <span class="tag">VMWare vCenter</span><span class="tag">VMWare view (Horizon)</span><span class="tag">Windows Active Directory</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai-assistant" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Assistente IA per Lettera di Presentazione ✨</h2>
+            <div class="card">
+                <p class="text-gray-700 mb-4">
+                    Incolla qui sotto la descrizione del lavoro per cui ti stai candidando. L'assistente IA utilizzerà le informazioni della sezione "Chi Sono" e questa descrizione per aiutarti a generare una bozza di paragrafo per la tua lettera di presentazione.
+                </p>
+                <textarea id="jobDescription" class="w-full h-40 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out" placeholder="Incolla qui la descrizione del lavoro..."></textarea>
+                <button id="generateDraftButton" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:shadow-lg transition duration-150 ease-in-out flex items-center justify-center">
+                    <span id="buttonText">Genera Bozza con IA ✨</span>
+                    <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+                </button>
+            </div>
+        </section>
+
+        <div id="aiOutputModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="closeModalButton">&times;</span>
+                <h3 id="modalTitle" class="text-xl font-semibold text-blue-700 mb-3"></h3>
+                <div id="modalBody" class="text-gray-700 whitespace-pre-wrap"></div>
+            </div>
+        </div>
+
+
+        <section id="education" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Formazione</h2>
+            <div class="space-y-6">
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700">European Master on Critical Networked Systems</h3>
+                    <p class="text-md text-gray-600">Università degli studi Parthenope di Napoli</p>
+                    <p class="text-sm text-gray-500 italic">Settembre 2009 – Luglio 2010</p>
+                    <p class="mt-1 text-gray-700">Tesi: Data Center Security and Service Availability: an Architectural Model for secure service supply.</p>
+                    <p class="mt-1 text-gray-700">Focus: ICT Security, SCADA systems, Ethical Hacking, RFID, Information Security, Wireless Sensors.</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700">Laurea Triennale in Ingegneria Informatica</h3>
+                    <p class="text-md text-gray-600">Seconda Università degli studi di Napoli</p>
+                    <p class="text-sm text-gray-500 italic">Settembre 2003 – Dicembre 2008</p>
+                    <p class="mt-1 text-gray-700">Tesi: Tecniche di allocazione risorse e scheduling di cluster di PC.</p>
+                    <p class="mt-1 text-gray-700">Focus: Linguaggi di programmazione (C++, Java, Assembler), Networking.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Competenze Digitali</h2>
+            <div class="card">
+                <div class="flex flex-wrap">
+                    <span class="tag">Windows / Windows Server</span><span class="tag">Linux (Ubuntu, RedHat, Opensuse, CentOS)</span>
+                    <span class="tag">VMware vSphere 5.x, 6.x, 7.x</span><span class="tag">Firewall (Fortinet)</span>
+                    <span class="tag">Cisco Switches</span><span class="tag">Openstack</span><span class="tag">IBM v3700 Storage</span>
+                    <span class="tag">Ansible</span><span class="tag">LAMP</span><span class="tag">Apache httpd</span><span class="tag">Git/Svn</span>
+                    <span class="tag">HPE Storage</span><span class="tag">Veeam Backup and Replication</span><span class="tag">IBM DS Series Storage</span>
+                    <span class="tag">PHP (Basics)</span><span class="tag">Bash scripting (Basics)</span><span class="tag">Azure Portal</span>
+                    <span class="tag">Azure Entra ID</span><span class="tag">Active Directory</span><span class="tag">Nagios XI / Nagios Core</span>
+                    <span class="tag">Docker, Docker-compose</span><span class="tag">Kubernetes (Basics)</span>
+                    <span class="tag">Databases (MySQL, MSSQL, Oracle, PostgreSQL)</span>
+                    <span class="tag">CMS (Wordpress, Joomla)</span>
+                </div>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mt-8 mb-4">Competenze Linguistiche</h3>
+            <div class="card">
+                 <p class="text-lg"><span class="font-semibold">Madrelingua:</span> Italiano</p>
+                 <div class="mt-2">
+                    <p class="text-lg font-semibold">Inglese:</p>
+                    <ul class="list-inside list-disc text-gray-700">
+                        <li>Ascolto: B1</li>
+                        <li>Lettura: C1</li>
+                        <li>Scrittura: C1</li>
+                        <li>Produzione Orale: B1</li>
+                        <li>Interazione Orale: B1</li>
+                    </ul>
+                 </div>
+            </div>
+        </section>
+
+        <section id="certifications" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Certificazioni</h2>
+            <div class="card">
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>VCP 7 - VMWare Certified Professional 7</li>
+                    <li>Netasq Firewall V9 Admin Certification</li>
+                    <li>AXIS Communications accademy video solutions fundamentals level 2</li>
+                    <li>First Step Lead Auditor ISO 27001</li>
+                    <li>Huawei Specialist Certification - IP Network (Security)</li>
+                    <li>Pre - Sales Specialist</li>
+                    <li>VMWare VTSP 5.5 - VMWare Technical Solution Professional 5.5</li>
+                    <li>VMWare VSP 2015 - VMWare Solution Professional</li>
+                    <li>VMWare VTSP - NV - VMWare Technical Solution Professional - Network Virtualization 1.0</li>
+                    <li>VMWare VSP - NV - VMWare Solution Professional - Network Virtualization 1.0</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white text-center p-6 mt-12">
+        <p>&copy; <span id="currentYear"></span> Antonio Di Gennaro. Tutti i diritti riservati.</p>
+        <p class="text-sm text-gray-400 mt-1">Autorizzo il trattamento dei dati personali ai sensi del D. Lgs. 196/03 e del GDPR (Regolamento UE 2016/679).</p>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Set current year in footer
+        const currentYearElement = document.getElementById('currentYear');
+        if (currentYearElement) {
+            currentYearElement.textContent = new Date().getFullYear();
+        }
+        
+
+        // Sticky navbar logic
+        let lastScrollTop = 0;
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (navbar) {
+                if (scrollTop > lastScrollTop && scrollTop > navbar.offsetHeight + 50) { // Scroll Down and past a certain point
+                    navbar.style.top = '-80px'; // Hide navbar
+                } else { // Scroll Up
+                    navbar.style.top = '0';
+                }
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
+        });
+
+        // AI Assistant Logic
+        const generateDraftButton = document.getElementById('generateDraftButton');
+        const jobDescriptionTextarea = document.getElementById('jobDescription');
+        const aboutMeTextElement = document.getElementById('about-me-text');
+        const aiOutputModal = document.getElementById('aiOutputModal');
+        const closeModalButton = document.getElementById('closeModalButton');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const buttonText = document.getElementById('buttonText');
+
+        function showModal(title, message) {
+            if (modalTitle) modalTitle.textContent = title;
+            if (modalBody) modalBody.textContent = message;
+            if (aiOutputModal) aiOutputModal.style.display = "block";
+        }
+
+        function hideModal() {
+            if (aiOutputModal) aiOutputModal.style.display = "none";
+        }
+
+        if (closeModalButton) {
+            closeModalButton.onclick = hideModal;
+        }
+        
+        // Close modal if user clicks outside of it
+        window.onclick = function(event) {
+            if (event.target == aiOutputModal) {
+                hideModal();
+            }
+        }
+
+        if (generateDraftButton) {
+            generateDraftButton.addEventListener('click', async () => {
+                const jobDescription = jobDescriptionTextarea ? jobDescriptionTextarea.value.trim() : "";
+                const aboutMe = aboutMeTextElement ? aboutMeTextElement.innerText.trim() : "";
+
+                if (!jobDescription) {
+                    showModal("Errore", "Per favore, incolla una descrizione del lavoro.");
+                    return;
+                }
+                if (!aboutMe) {
+                    showModal("Errore", "Impossibile trovare la sezione 'Chi Sono'. Assicurati che esista e abbia un ID 'about-me-text'.");
+                    return;
+                }
+
+                // Show spinner and disable button
+                if (loadingSpinner) loadingSpinner.style.display = 'inline-block';
+                if (buttonText) buttonText.textContent = 'Generazione...';
+                generateDraftButton.disabled = true;
+
+                const prompt = `Basandoti sulla seguente descrizione della persona (sezione "Chi Sono" del suo CV):\n"${aboutMe}"\n\nE sulla seguente descrizione del lavoro:\n"${jobDescription}"\n\nScrivi un breve paragrafo introduttivo (massimo 3-4 frasi) per una lettera di presentazione. Il paragrafo deve essere professionale, conciso e mettere in evidenza come le caratteristiche e le esperienze della persona siano in linea con i requisiti del lavoro. Inizia direttamente con il testo della lettera, senza frasi come "Ecco un paragrafo:" o simili. Parla in prima persona, come se fossi il candidato.`;
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; // API key will be handled by the environment
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error("API Error:", errorData);
+                        throw new Error(`Errore dall'API Gemini: ${errorData?.error?.message || response.status}`);
+                    }
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const generatedText = result.candidates[0].content.parts[0].text;
+                        showModal("Bozza Generata con IA ✨", generatedText);
+                    } else {
+                        console.error("Unexpected API response structure:", result);
+                        throw new Error("La risposta dell'API non contiene il testo generato o ha una struttura inattesa.");
+                    }
+
+                } catch (error) {
+                    console.error("Errore durante la generazione della bozza:", error);
+                    showModal("Errore", `Si è verificato un errore: ${error.message}. Controlla la console per maggiori dettagli.`);
+                } finally {
+                    // Hide spinner and re-enable button
+                    if (loadingSpinner) loadingSpinner.style.display = 'none';
+                    if (buttonText) buttonText.textContent = 'Genera Bozza con IA ✨';
+                    if (generateDraftButton) generateDraftButton.disabled = false;
+                }
+            });
+        }
+
+    </script>
+
+</body>
+</html>
