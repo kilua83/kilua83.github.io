@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { Settings, Download, Plus, Edit2, Trash2, X, ArrowUpDown, ArrowUp, ArrowDown, FileText, Search, DollarSign, AlertCircle, CloudOff, CloudUpload, Check, Lock, LogOut, User } from 'lucide-react';
+import { Settings, Download, Plus, Edit2, Trash2, X, ArrowUpDown, ArrowUp, ArrowDown, FileText, Search, DollarSign, AlertCircle, CloudOff, CloudUpload, Check, Lock, LogOut, User, RefreshCw } from 'lucide-react';
 import { format, differenceInDays, parseISO } from 'date-fns';
 import * as XLSX from 'xlsx';
 import { login, getSessionToken, getSessionUser, logout } from './auth';
@@ -45,40 +45,51 @@ function App() {
     setLoading(true);
     try {
       if (token && repo && path) {
-        // Fetch from GitHub API
-        const response = await fetch(`${GITHUB_API_URL}/${repo}/contents/${path}`, {
-          headers: {
-            'Authorization': `token ${token}`,
-            'Accept': 'application/vnd.github.v3+json'
-          },
-          cache: 'no-store'
-        });
-        
+        // Always fetch fresh from GitHub API (cache-buster via timestamp)
+        const response = await fetch(
+          `${GITHUB_API_URL}/${repo}/contents/${path}?t=${Date.now()}`,
+          {
+            headers: {
+              'Authorization': `token ${token}`,
+              'Accept': 'application/vnd.github.v3+json'
+            },
+            cache: 'no-store'
+          }
+        );
+
         if (response.ok) {
           const json = await response.json();
-          const content = atob(json.content);
+          // GitHub returns base64 content possibly with newlines — strip them
+          const rawBase64 = json.content.replace(/\n/g, '');
+          const content = atob(rawBase64);
           const parsed = JSON.parse(content);
           setData(parsed);
+          // Update local cache so offline fallback is fresh too
           localStorage.setItem('scadenziario_data', JSON.stringify(parsed));
           setLoading(false);
           return;
+        } else {
+          const errBody = await response.json().catch(() => ({}));
+          console.error('GitHub API error', response.status, errBody);
+          showToast(`Errore GitHub API (${response.status}) — riprovo da cache locale`, 'error');
         }
       }
-      
-      // Fallback to local file or local storage
+
+      // Fallback: local cache (same device) or static db.json
       const localData = localStorage.getItem('scadenziario_data');
       if (localData) {
         setData(JSON.parse(localData));
+        showToast('Dati da cache locale — potrebbero non essere aggiornati', 'error');
       } else {
-        const response = await fetch('./db.json');
+        const response = await fetch('./db.json?t=' + Date.now());
         if (response.ok) {
           const json = await response.json();
           setData(json);
         }
       }
     } catch (err) {
-      console.error("Error fetching data", err);
-      showToast("Errore nel caricamento dati", "error");
+      console.error('Error fetching data', err);
+      showToast('Errore nel caricamento dati: ' + err.message, 'error');
     } finally {
       setLoading(false);
     }
@@ -471,6 +482,9 @@ function App() {
           )}
         </div>
         <div className="controls">
+          <button onClick={() => fetchData(authToken)} title="Ricarica dati da GitHub" disabled={loading}>
+            <RefreshCw size={18} style={loading ? { animation: 'spin 1s linear infinite' } : {}} /> Ricarica
+          </button>
           <button onClick={() => setShowSettings(true)}>
             <Settings size={18} /> Config
           </button>
