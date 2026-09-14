@@ -1,1 +1,332 @@
-[]
+[
+  {
+    "id": "umbgcrist",
+    "username": "umbgcrist",
+    "plan": "10 mese ",
+    "expireDate": "2026-10-05T00:00:00.000",
+    "notes": "gcrist suocero (padre Umberto) ",
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "Umbsuocgcrist",
+    "username": "Umbsuocgcrist",
+    "plan": "10 mese",
+    "expireDate": "2026-10-05T00:00:00.000",
+    "notes": "Umberto suocero gcrist",
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "giacri",
+    "username": "giacri",
+    "plan": "50 semestre",
+    "expireDate": "2027-02-12T00:00:00.000",
+    "notes": "gianluca cristiano ",
+    "credits": null,
+    "dueAmount": 50,
+    "remaining": null
+  },
+  {
+    "id": "framarcar",
+    "username": "framarcar",
+    "plan": "50 semestre",
+    "expireDate": "2026-12-14T00:00:00.000",
+    "notes": "framarcar francesco orazio",
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "framarcnip",
+    "username": "framarcnip",
+    "plan": "50 semestre",
+    "expireDate": "2027-01-05T00:00:00.000",
+    "notes": "framarcar nipote",
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "diabolik81",
+    "username": "diabolik81",
+    "plan": "50 semestre",
+    "expireDate": "2027-04-13T00:00:00.000",
+    "notes": "marino auto cugino framarcar",
+    "credits": "nop",
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "donatoc",
+    "username": "donatoc",
+    "plan": "50 semestre ",
+    "expireDate": "2027-04-13T00:00:00.000",
+    "notes": "padre marino auto diabolik81",
+    "credits": "nop",
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "Mimmoumberto",
+    "username": "Mimmoumberto",
+    "plan": "50 semestre ",
+    "expireDate": "2027-01-30T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "giufon",
+    "username": "giufon",
+    "plan": "50 semestre ",
+    "expireDate": "2027-03-14T00:00:00.000",
+    "notes": "fratello mimmoumberto",
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "salsc",
+    "username": "salsc",
+    "plan": "10 mese",
+    "expireDate": "2026-09-21T00:00:00.000",
+    "notes": "salvatore carabiniere",
+    "credits": null,
+    "dueAmount": "1 mese",
+    "remaining": null
+  },
+  {
+    "id": "rafaba",
+    "username": "rafaba",
+    "plan": "50 semestre",
+    "expireDate": "2026-09-22T00:00:00.000",
+    "notes": "Raffaele Abate",
+    "credits": null,
+    "dueAmount": "1 mese",
+    "remaining": null
+  },
+  {
+    "id": "enzofruvic",
+    "username": "enzofruvic",
+    "plan": "10 mese",
+    "expireDate": "2026-11-08T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "mauriziofrut",
+    "username": "mauriziofrut",
+    "plan": "50 semestre ",
+    "expireDate": "2026-11-05T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "maurizio2",
+    "username": "maurizio2",
+    "plan": "50 semestre ",
+    "expireDate": "2027-01-28T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "enzfrutt",
+    "username": "enzfrutt",
+    "plan": "5 mese",
+    "expireDate": "2026-12-08T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "gianldes",
+    "username": "gianldes",
+    "plan": "5 mese",
+    "expireDate": "2026-09-20T00:00:00.000",
+    "notes": null,
+    "credits": "nop",
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "pignafrat",
+    "username": "pignafrat",
+    "plan": "5 mese",
+    "expireDate": "2026-11-27T00:00:00.000",
+    "notes": "marco",
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "maremoto1",
+    "username": "maremoto1",
+    "plan": "5 mese",
+    "expireDate": "2026-09-17T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "menzio",
+    "username": "menzio",
+    "plan": "5 mese",
+    "expireDate": "2026-09-27T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "men2",
+    "username": "men2",
+    "plan": "5 mese",
+    "expireDate": "2026-09-07T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "palzio",
+    "username": "palzio",
+    "plan": "5 mese ",
+    "expireDate": "2026-04-24T00:00:00.000",
+    "notes": "palumbo zio",
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "palzio2",
+    "username": "palzio2",
+    "plan": "5 mese",
+    "expireDate": "2026-10-06T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "redsca",
+    "username": "redsca",
+    "plan": "9 mese",
+    "expireDate": "2026-10-01T00:00:00.000",
+    "notes": "scarpati 9 al mese",
+    "credits": null,
+    "dueAmount": "1 mese",
+    "remaining": null
+  },
+  {
+    "id": "redsca2",
+    "username": "redsca2",
+    "plan": "9 mese",
+    "expireDate": "2026-10-10T00:00:00.000",
+    "notes": "scarpati2 9 al mese",
+    "credits": null,
+    "dueAmount": "1 mese",
+    "remaining": null
+  },
+  {
+    "id": "redbros",
+    "username": "redbros",
+    "plan": "9 mese",
+    "expireDate": "2027-09-13T00:00:00.000",
+    "notes": "amico scarpati",
+    "credits": null,
+    "dueAmount": 120,
+    "remaining": null
+  },
+  {
+    "id": "redbros2",
+    "username": "redbros2",
+    "plan": "9 mese",
+    "expireDate": "2027-09-13T00:00:00.000",
+    "notes": "amico scarpati 2",
+    "credits": null,
+    "dueAmount": 120,
+    "remaining": null
+  },
+  {
+    "id": "galba",
+    "username": "galba",
+    "plan": null,
+    "expireDate": "2027-02-03T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "egida",
+    "username": "egida",
+    "plan": null,
+    "expireDate": "2025-12-23T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "bobparen",
+    "username": "bobparen",
+    "plan": null,
+    "expireDate": "2026-11-11T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "mattalba",
+    "username": "mattalba",
+    "plan": null,
+    "expireDate": "2025-06-14T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "galba2",
+    "username": "galba2",
+    "plan": null,
+    "expireDate": "2026-02-05T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "pesan",
+    "username": "pesan",
+    "plan": null,
+    "expireDate": "2025-03-07T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  },
+  {
+    "id": "pasquatap",
+    "username": "pasquatap",
+    "plan": null,
+    "expireDate": "2025-08-08T00:00:00.000",
+    "notes": null,
+    "credits": null,
+    "dueAmount": null,
+    "remaining": null
+  }
+]
