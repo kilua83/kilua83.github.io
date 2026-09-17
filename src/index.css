@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
   --bg-color: #0f172a;
@@ -777,3 +777,706 @@ tr.expiring:hover {
 }
 
 
+/* ==========================================================================
+   NATIVE APP / CAPACITOR PLATFORM STYLES
+   ========================================================================== */
+
+/* Safe area inset support for Android notch and navigation bar */
+body.is-native {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+body.is-native .app-container {
+  padding-bottom: calc(72px + env(safe-area-inset-bottom));
+}
+
+body.is-native .toast {
+  bottom: calc(80px + env(safe-area-inset-bottom));
+}
+
+/* ==========================================================================
+   CARD-BASED MOBILE LAYOUT (replaces the table on small screens)
+   ========================================================================== */
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.user-card {
+  background: rgba(30, 41, 59, 0.75);
+  border: 1px solid var(--panel-border);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  animation: cardFadeIn 0.2s ease both;
+}
+
+.user-card:active {
+  transform: scale(0.99);
+}
+
+.user-card.expiring {
+  border-color: rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.07);
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.card-username {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  flex: 1;
+  line-height: 1.2;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.card-actions .icon-btn {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--panel-border);
+}
+
+.card-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 0.75rem;
+}
+
+.card-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.card-field-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.card-field-value {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.card-field-value.expiring-text {
+  color: #fca5a5 !important;
+}
+
+.card-field-value.empty {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.25rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--panel-border);
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.card-notes {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   BOTTOM NAVIGATION BAR (native app style)
+   ========================================================================== */
+
+.bottom-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: rgba(15, 23, 42, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--panel-border);
+    z-index: 200;
+    padding-bottom: env(safe-area-inset-bottom);
+    align-items: stretch;
+    justify-content: space-around;
+  }
+
+  .bottom-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 0.5rem 0.25rem;
+    border-radius: 0;
+  }
+
+  .bottom-nav-item:hover,
+  .bottom-nav-item.active {
+    color: var(--accent);
+    background: transparent;
+  }
+
+  .bottom-nav-item svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* Hide desktop controls on mobile — replaced by bottom nav */
+  .controls {
+    display: none;
+  }
+
+  /* Compact sticky top bar for mobile */
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--panel-border);
+    margin: -1rem -0.75rem 1rem -0.75rem;
+  }
+
+  .mobile-topbar h1 {
+    font-size: 1.3rem;
+    margin: 0;
+  }
+
+  .mobile-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .search-box {
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+  }
+
+  .search-box input {
+    font-size: 16px;
+  }
+
+  /* Panel header tighter on mobile */
+  .panel-header h2 {
+    font-size: 1.1rem;
+  }
+
+  /* Hide panel-header add button on mobile (FAB takes over) */
+  .panel-header button.add-btn-desktop {
+    display: none;
+  }
+}
+
+/* Always hide mobile topbar on desktop */
+.mobile-topbar {
+  display: none;
+}
+
+/* ==========================================================================
+   NATIVE FAB (Floating Action Button)
+   ========================================================================== */
+
+.fab-add {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .fab-add {
+    display: flex;
+    position: fixed;
+    bottom: calc(68px + env(safe-area-inset-bottom));
+    right: 1.25rem;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #6366f1);
+    color: white;
+    border: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.45);
+    cursor: pointer;
+    z-index: 150;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .fab-add:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 24px rgba(59, 130, 246, 0.6);
+    background: linear-gradient(135deg, var(--accent), #6366f1);
+  }
+
+  .fab-add:active {
+    transform: scale(0.96);
+  }
+}
+
+/* ==========================================================================
+   EMPTY STATE
+   ========================================================================== */
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary);
+}
+
+.empty-state svg {
+  opacity: 0.3;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   GRUPPI COLORATI (Excel Match) & FILTRI RAPIDI
+   ========================================================================== */
+
+.group-filter-container {
+  margin-bottom: 1rem;
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--panel-border);
+  border-radius: 14px;
+  padding: 0.75rem 1rem;
+}
+
+.group-filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.group-filter-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.group-filter-clear {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.group-filter-clear:hover {
+  background: rgba(96, 165, 250, 0.15);
+}
+
+.group-chips-scroll {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.35rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.group-chips-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.group-chips-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.group-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.group-chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.group-chip.active {
+  color: var(--text-primary);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.color-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.chip-badge {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+}
+
+/* Badge pillola per tabella e card */
+.group-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 12px;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.group-pill-mini {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.1rem 0.4rem;
+  border-radius: 8px;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+/* ==========================================================================
+   VIEW MODE TOGGLE & PANEL HEADER
+   ========================================================================== */
+
+.panel-header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.panel-count-tag {
+  background: rgba(96, 165, 250, 0.15);
+  color: var(--accent);
+  border: 1px solid rgba(96, 165, 250, 0.25);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+}
+
+.view-mode-toggle {
+  display: flex;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.view-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.4rem 0.7rem;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.view-toggle-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.view-toggle-btn.active {
+  background: linear-gradient(135deg, var(--accent), #6366f1);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+}
+
+@media (max-width: 480px) {
+  .view-toggle-btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  .toggle-text {
+    display: none; /* Icon only on extra-small screens */
+  }
+}
+
+/* ==========================================================================
+   VISTA TABELLA ULTRA-COMPATTA (Anti-Swipe Mobile)
+   ========================================================================== */
+
+.compact-table-wrapper {
+  width: 100%;
+  overflow: hidden; /* NO SCROLL ORIZZONTALE */
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+.compact-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Adatta perfettamente alle percentuali senza sforare */
+}
+
+.compact-table th {
+  padding: 0.6rem 0.4rem;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.3);
+}
+
+.compact-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.15s ease;
+}
+
+.compact-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.compact-row.expiring {
+  background: rgba(239, 68, 68, 0.08) !important;
+}
+
+.compact-table td {
+  padding: 0.55rem 0.35rem;
+  vertical-align: middle;
+}
+
+/* Colonna Utente */
+.compact-col-user {
+  width: auto;
+  overflow: hidden;
+}
+
+.compact-user-main {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.compact-username {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+
+.compact-user-sub {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  margin-top: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.sub-plan {
+  color: #93c5fd;
+  font-weight: 500;
+}
+
+.sub-notes {
+  color: #d1d5db;
+  font-style: italic;
+}
+
+/* Colonna Scadenza */
+.compact-col-date {
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.compact-date-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.compact-badge {
+  font-size: 0.6rem !important;
+  padding: 0.1rem 0.3rem !important;
+}
+
+/* Colonna Da Pagare */
+.compact-col-due {
+  text-align: center;
+}
+
+.compact-due {
+  font-size: 0.78rem !important;
+  padding: 0.2rem 0.45rem !important;
+}
+
+.empty-dash {
+  color: var(--text-secondary);
+  opacity: 0.4;
+}
+
+/* Colonna Azioni */
+.compact-col-actions {
+  text-align: center;
+}
+
+.compact-action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.icon-btn-mini {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.icon-btn-mini.edit:hover {
+  background: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+  border-color: rgba(96, 165, 250, 0.4);
+}
+
+.icon-btn-mini.delete:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* Card user info header */
+.card-user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Form group select */
+.group-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.group-select option {
+  background: #1e293b;
+  color: #f8fafc;
+}

@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { Settings, Download, Plus, Edit2, Trash2, X, ArrowUpDown, ArrowUp, ArrowDown, FileText, Search, DollarSign, AlertCircle, CloudOff, CloudUpload, Check, Lock, LogOut, User, RefreshCw } from 'lucide-react';
+import { Settings, Download, Plus, Edit2, Trash2, X, ArrowUpDown, ArrowUp, ArrowDown, FileText, Search, DollarSign, AlertCircle, CloudOff, CloudUpload, Check, Lock, LogOut, User, RefreshCw, List, Bell, LayoutGrid, Table, Layers, Palette } from 'lucide-react';
 import { format, differenceInDays, parseISO } from 'date-fns';
 import * as XLSX from 'xlsx';
 import { login, getSessionToken, getSessionUser, logout } from './auth';
+import { USER_GROUPS, getUserGroup } from './groups';
 import './index.css';
 
 
@@ -19,6 +20,13 @@ function App() {
   // 'idle' | 'saving' | 'saved' | 'error'
   const [syncStatus, setSyncStatus] = useState('idle');
   const isInitialLoad = useRef(true);
+
+  // Detect native Capacitor platform and add body class for safe-area insets
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.Capacitor?.isNativePlatform?.()) {
+      document.body.classList.add('is-native');
+    }
+  }, []);
   
   // GitHub Settings
   const [ghSettings, setGhSettings] = useState({
@@ -209,6 +217,17 @@ function App() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDueOnly, setFilterDueOnly] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState(null);
+  
+  // View mode: 'compact' (default, super compact table for mobile/desktop), 'cards' (card layout), 'full' (desktop wide table)
+  const [viewMode, setViewMode] = useState(() => {
+    return localStorage.getItem('scadenziario_view_mode') || 'compact';
+  });
+
+  const handleSetViewMode = (mode) => {
+    setViewMode(mode);
+    localStorage.setItem('scadenziario_view_mode', mode);
+  };
 
   // Sorting state (default: expireDate ascending)
   const [sortConfig, setSortConfig] = useState({ key: 'expireDate', direction: 'asc' });
@@ -238,6 +257,16 @@ function App() {
   const dueCount = useMemo(() => data.filter(i => isValued(i.dueAmount)).length, [data]);
   const expiringCount = useMemo(() => data.filter(i => isExpiring(i.expireDate)).length, [data]);
 
+  const groupCounts = useMemo(() => {
+    const counts = {};
+    USER_GROUPS.forEach(g => { counts[g.id] = 0; });
+    data.forEach(item => {
+      const grp = getUserGroup(item.username, item.group);
+      if (grp) counts[grp.id] = (counts[grp.id] || 0) + 1;
+    });
+    return counts;
+  }, [data]);
+
   const processedData = useMemo(() => {
     let result = [...data];
 
@@ -256,6 +285,14 @@ function App() {
     // Due only toggle
     if (filterDueOnly) {
       result = result.filter(item => isValued(item.dueAmount));
+    }
+
+    // Group filter
+    if (selectedGroup) {
+      result = result.filter(item => {
+        const grp = getUserGroup(item.username, item.group);
+        return grp?.id === selectedGroup;
+      });
     }
 
     if (!sortConfig.key) return result;
@@ -300,7 +337,7 @@ function App() {
       const cmp = String(valA).localeCompare(String(valB), undefined, { numeric: true, sensitivity: 'base' });
       return sortConfig.direction === 'asc' ? cmp : -cmp;
     });
-  }, [data, sortConfig, searchTerm, filterDueOnly]);
+  }, [data, sortConfig, searchTerm, filterDueOnly, selectedGroup]);
 
   const exportExcel = () => {
     const ws = XLSX.utils.json_to_sheet(processedData.map(item => ({
@@ -328,7 +365,8 @@ function App() {
       notes: formData.get('notes'),
       credits: formData.get('credits'),
       dueAmount: formData.get('dueAmount'),
-      remaining: formData.get('remaining')
+      remaining: formData.get('remaining'),
+      group: formData.get('group') || null
     };
 
     let newData;
@@ -450,12 +488,351 @@ function App() {
     );
   }
 
+  // ── Card renderer for mobile layout ──────────────────────────────────────
+  // ── Ultra-Compact table for mobile/desktop (no horizontal swipe required) ──
+  const renderCompactTable = () => {
+    if (processedData.length === 0) {
+      return (
+        <div className="empty-state">
+          <Search size={40} />
+          <p>{searchTerm ? 'Nessun risultato trovato.' : 'Nessun dato presente.'}</p>
+        </div>
+      );
+    }
+    return (
+      <div className="compact-table-wrapper">
+        <table className="compact-table">
+          <thead>
+            <tr>
+              <th onClick={() => handleSort('username')} className="sortable-th">
+                <div className="th-content">
+                  <span>Utente / Info</span>
+                  {sortConfig.key === 'username' ? (
+                    sortConfig.direction === 'asc' ? <ArrowUp size={12} style={{ color: 'var(--accent)' }} /> : <ArrowDown size={12} style={{ color: 'var(--accent)' }} />
+                  ) : (
+                    <ArrowUpDown size={12} style={{ opacity: 0.3 }} />
+                  )}
+                </div>
+              </th>
+              <th onClick={() => handleSort('expireDate')} className="sortable-th" style={{ width: '90px' }}>
+                <div className="th-content">
+                  <span>Scadenza</span>
+                  {sortConfig.key === 'expireDate' ? (
+                    sortConfig.direction === 'asc' ? <ArrowUp size={12} style={{ color: 'var(--accent)' }} /> : <ArrowDown size={12} style={{ color: 'var(--accent)' }} />
+                  ) : (
+                    <ArrowUpDown size={12} style={{ opacity: 0.3 }} />
+                  )}
+                </div>
+              </th>
+              <th onClick={() => handleSort('dueAmount')} className="sortable-th" style={{ width: '80px' }}>
+                <div className="th-content">
+                  <span>Da Pagare</span>
+                  {sortConfig.key === 'dueAmount' ? (
+                    sortConfig.direction === 'asc' ? <ArrowUp size={12} style={{ color: 'var(--accent)' }} /> : <ArrowDown size={12} style={{ color: 'var(--accent)' }} />
+                  ) : (
+                    <ArrowUpDown size={12} style={{ opacity: 0.3 }} />
+                  )}
+                </div>
+              </th>
+              <th style={{ width: '60px', textAlign: 'center' }}>Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+            {processedData.map((item, index) => {
+              const expiring = isExpiring(item.expireDate);
+              const grp = getUserGroup(item.username, item.group);
+              return (
+                <tr 
+                  key={item.id || index} 
+                  className={`compact-row${expiring ? ' expiring' : ''}`}
+                  style={grp ? { borderLeft: `4px solid ${grp.color}`, background: `linear-gradient(90deg, ${grp.bg} 0%, rgba(255, 255, 255, 0.02) 40%)` } : {}}
+                >
+                  <td className="compact-col-user">
+                    <div className="compact-user-main">
+                      <span className="compact-username">{item.username || '—'}</span>
+                      {grp && (
+                        <span 
+                          className="group-pill-mini" 
+                          style={{ backgroundColor: grp.color, color: grp.badgeText || '#fff' }}
+                          title={grp.label}
+                        >
+                          {grp.label.split(' ')[0]}
+                        </span>
+                      )}
+                    </div>
+                    {(item.plan || item.notes || item.credits) && (
+                      <div className="compact-user-sub">
+                        {item.plan && <span className="sub-plan">{item.plan}</span>}
+                        {item.credits && <span className="sub-credits">• {item.credits}</span>}
+                        {item.notes && <span className="sub-notes">• 📝 {item.notes}</span>}
+                      </div>
+                    )}
+                  </td>
+                  <td className={`compact-col-date${expiring ? ' expiring-text' : ''}`}>
+                    <div className="compact-date-cell">
+                      <span>{item.expireDate ? format(parseISO(item.expireDate), 'dd/MM/yy') : '—'}</span>
+                      {expiring && <span className="status-badge status-danger compact-badge">Scade</span>}
+                    </div>
+                  </td>
+                  <td className="compact-col-due">
+                    {isValued(item.dueAmount) ? (
+                      <span className="due-badge compact-due">{item.dueAmount}</span>
+                    ) : (
+                      <span className="empty-dash">—</span>
+                    )}
+                  </td>
+                  <td className="compact-col-actions">
+                    <div className="compact-action-buttons">
+                      <button className="icon-btn-mini edit" title="Modifica" onClick={() => openEditModal(item)}>
+                        <Edit2 size={13} />
+                      </button>
+                      <button className="icon-btn-mini delete" title="Elimina" onClick={() => deleteItem(item.id)}>
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  // ── Card renderer for mobile layout ──────────────────────────────────────
+  const renderCards = () => {
+    if (processedData.length === 0) {
+      return (
+        <div className="empty-state">
+          <Search size={40} />
+          <p>{searchTerm ? 'Nessun risultato trovato.' : 'Nessun dato presente.'}</p>
+        </div>
+      );
+    }
+    return (
+      <div className="card-list">
+        {processedData.map((item, index) => {
+          const expiring = isExpiring(item.expireDate);
+          const grp = getUserGroup(item.username, item.group);
+          return (
+            <div 
+              key={item.id || index} 
+              className={`user-card${expiring ? ' expiring' : ''}`}
+              style={grp ? { borderLeft: `5px solid ${grp.color}`, background: `linear-gradient(90deg, ${grp.bg} 0%, rgba(30, 41, 59, 0.7) 40%)` } : {}}
+            >
+              <div className="card-header">
+                <div className="card-user-info">
+                  <span className="card-username">{item.username || '—'}</span>
+                  {grp && (
+                    <span 
+                      className="group-pill" 
+                      style={{ backgroundColor: grp.color, color: grp.badgeText || '#fff' }}
+                    >
+                      {grp.label}
+                    </span>
+                  )}
+                </div>
+                <div className="card-actions">
+                  <button className="icon-btn edit" title="Modifica" onClick={() => openEditModal(item)}>
+                    <Edit2 size={16} />
+                  </button>
+                  <button className="icon-btn delete" title="Elimina" onClick={() => deleteItem(item.id)}>
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="card-meta">
+                <div className="card-field">
+                  <span className="card-field-label">Piano</span>
+                  <span className={`card-field-value${!item.plan ? ' empty' : ''}`}>{item.plan || '—'}</span>
+                </div>
+                <div className="card-field">
+                  <span className="card-field-label">Tipo Lista</span>
+                  <span className={`card-field-value${!item.credits ? ' empty' : ''}`}>{item.credits || '—'}</span>
+                </div>
+                <div className="card-field">
+                  <span className="card-field-label">Scadenza</span>
+                  <span className={`card-field-value${expiring ? ' expiring-text' : ''}${!item.expireDate ? ' empty' : ''}`}>
+                    {item.expireDate ? format(parseISO(item.expireDate), 'dd/MM/yyyy') : '—'}
+                    {expiring && <span className="status-badge status-danger" style={{ marginLeft: '0.4rem', fontSize: '0.65rem' }}>⚠ Scade</span>}
+                  </span>
+                </div>
+                <div className="card-field">
+                  <span className="card-field-label">Da Pagare</span>
+                  <span className="card-field-value">
+                    {isValued(item.dueAmount)
+                      ? <span className="due-badge">{item.dueAmount}</span>
+                      : <span className="empty">—</span>
+                    }
+                  </span>
+                </div>
+              </div>
+
+              {item.notes && (
+                <div className="card-footer">
+                  <span className="card-notes">📝 {item.notes}</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  // ── Full Desktop Table renderer ──────────────────────────────────────────
+  const renderFullTable = () => {
+    return (
+      <div className="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th
+                className="sortable-th"
+                onClick={() => handleSort('username')}
+                title="Clicca per ordinare per Username"
+              >
+                <div className="th-content">
+                  <span>Username</span>
+                  {sortConfig.key === 'username' ? (
+                    sortConfig.direction === 'asc' ? <ArrowUp size={14} style={{ color: 'var(--accent)' }} /> : <ArrowDown size={14} style={{ color: 'var(--accent)' }} />
+                  ) : (
+                    <ArrowUpDown size={14} style={{ opacity: 0.3 }} />
+                  )}
+                </div>
+              </th>
+              <th>Piano</th>
+              <th
+                className="sortable-th"
+                onClick={() => handleSort('expireDate')}
+                title="Clicca per ordinare per Data di Scadenza"
+              >
+                <div className="th-content">
+                  <span>Scadenza</span>
+                  {sortConfig.key === 'expireDate' ? (
+                    sortConfig.direction === 'asc' ? <ArrowUp size={14} style={{ color: 'var(--accent)' }} /> : <ArrowDown size={14} style={{ color: 'var(--accent)' }} />
+                  ) : (
+                    <ArrowUpDown size={14} style={{ opacity: 0.3 }} />
+                  )}
+                </div>
+              </th>
+              <th>Note</th>
+              <th>Tipo Lista</th>
+              <th
+                className="sortable-th"
+                onClick={() => handleSort('dueAmount')}
+                title="Clicca per ordinare per Da Pagare (mostra prima i valorizzati)"
+              >
+                <div className="th-content">
+                  <span>Da Pagare</span>
+                  {sortConfig.key === 'dueAmount' ? (
+                    sortConfig.direction === 'asc' ? <ArrowUp size={14} style={{ color: 'var(--accent)' }} /> : <ArrowDown size={14} style={{ color: 'var(--accent)' }} />
+                  ) : (
+                    <ArrowUpDown size={14} style={{ opacity: 0.3 }} />
+                  )}
+                </div>
+              </th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+            {processedData.map((item, index) => {
+              const expiring = isExpiring(item.expireDate);
+              const grp = getUserGroup(item.username, item.group);
+              return (
+                <tr 
+                  key={item.id || index} 
+                  className={expiring ? 'expiring' : ''}
+                  style={grp ? { borderLeft: `4px solid ${grp.color}`, background: `linear-gradient(90deg, ${grp.bg} 0%, transparent 20%)` } : {}}
+                >
+                  <td style={{ fontWeight: 600 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                      <span>{item.username}</span>
+                      {grp && (
+                        <span 
+                          className="group-pill-mini" 
+                          style={{ backgroundColor: grp.color, color: grp.badgeText || '#fff' }}
+                          title={grp.label}
+                        >
+                          {grp.label}
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td>{item.plan}</td>
+                  <td className={expiring ? 'expiring-text' : ''}>
+                    {item.expireDate ? format(parseISO(item.expireDate), 'dd/MM/yyyy') : '-'}
+                    {expiring && <div className="status-badge status-danger" style={{ marginLeft: '0.5rem' }}>In scadenza</div>}
+                  </td>
+                  <td>{item.notes}</td>
+                  <td>{item.credits}</td>
+                  <td>
+                    {isValued(item.dueAmount) ? (
+                      <span className="due-badge">{item.dueAmount}</span>
+                    ) : (
+                      <span style={{ color: 'var(--text-secondary)' }}>-</span>
+                    )}
+                  </td>
+                  <td>
+                    <div className="action-buttons">
+                      <button className="icon-btn edit" title="Modifica" onClick={() => openEditModal(item)}>
+                        <Edit2 size={16} />
+                      </button>
+                      <button className="icon-btn delete" title="Elimina" onClick={() => deleteItem(item.id)}>
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+            {processedData.length === 0 && (
+              <tr>
+                <td colSpan="7" style={{ textAlign: 'center', padding: '2rem' }}>
+                  {searchTerm ? 'Nessun risultato corrispondente alla ricerca.' : 'Nessun dato presente.'}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
   return (
     <div className="app-container">
+      {/* ── Mobile topbar (only visible on small screens) ── */}
+      <div className="mobile-topbar">
+        <h1>Scadenziario</h1>
+        <div className="mobile-topbar-right">
+          {ghSettings.token ? (
+            <div className={`sync-status sync-${syncStatus}`} style={{ fontSize: '0.7rem' }}>
+              {syncStatus === 'saving' && <div className="loading-spinner" style={{ width: 12, height: 12, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#60a5fa' }} />}
+              {syncStatus === 'saved' && <Check size={12} />}
+              {syncStatus === 'error' && <CloudOff size={12} />}
+              {syncStatus === 'idle' && <CloudUpload size={12} />}
+              <span>{
+                syncStatus === 'saving' ? 'Salvo...' :
+                syncStatus === 'saved' ? 'Salvato!' :
+                syncStatus === 'error' ? 'Errore' :
+                'Sync OK'
+              }</span>
+            </div>
+          ) : (
+            <div className="sync-status sync-notoken" style={{ fontSize: '0.7rem' }} onClick={() => setShowSettings(true)}>
+              <CloudOff size={12} />
+              <span>No sync</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Desktop header (hidden on mobile via CSS) ── */}
       <header>
         <div className="title-area">
           <h1>Scadenziario</h1>
-          {/* Cloud sync status indicator */}
           {ghSettings.token ? (
             <div className={`sync-status sync-${syncStatus}`} title={
               syncStatus === 'saving' ? 'Salvataggio su GitHub...' :
@@ -532,10 +909,87 @@ function App() {
         </div>
       </div>
 
+      {/* Gruppi Colorati Filter Bar */}
+      <div className="group-filter-container">
+        <div className="group-filter-header">
+          <div className="group-filter-title">
+            <Palette size={15} style={{ color: 'var(--accent)' }} />
+            <span>Gruppi Utenti ({USER_GROUPS.length}):</span>
+          </div>
+          {selectedGroup && (
+            <button 
+              className="group-filter-clear" 
+              onClick={() => setSelectedGroup(null)}
+              title="Mostra tutti i gruppi"
+            >
+              <X size={13} /> Mostra tutti
+            </button>
+          )}
+        </div>
+        <div className="group-chips-scroll">
+          <button
+            className={`group-chip ${selectedGroup === null ? 'active' : ''}`}
+            onClick={() => setSelectedGroup(null)}
+          >
+            <span>Tutti</span>
+            <span className="chip-badge">{data.length}</span>
+          </button>
+          {USER_GROUPS.map(grp => {
+            const count = groupCounts[grp.id] || 0;
+            const isAct = selectedGroup === grp.id;
+            return (
+              <button
+                key={grp.id}
+                className={`group-chip ${isAct ? 'active' : ''}`}
+                style={isAct ? { borderColor: grp.color, backgroundColor: grp.bg } : {}}
+                onClick={() => setSelectedGroup(prev => prev === grp.id ? null : grp.id)}
+                title={grp.label}
+              >
+                <span className="color-dot" style={{ backgroundColor: grp.color }} />
+                <span>{grp.label}</span>
+                <span className="chip-badge">{count}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="glass-panel">
         <div className="panel-header">
-          <h2>Elenco Utenze</h2>
-          <button className="primary" onClick={openAddModal}>
+          <div className="panel-header-title">
+            <h2>Elenco Utenze</h2>
+            <span className="panel-count-tag">{processedData.length}</span>
+          </div>
+
+          {/* View Mode Toggle */}
+          <div className="view-mode-toggle">
+            <button 
+              className={`view-toggle-btn ${viewMode === 'compact' ? 'active' : ''}`}
+              onClick={() => handleSetViewMode('compact')}
+              title="Vista Tabella Compatta (adatta a smartphone senza scorrere a destra)"
+            >
+              <Table size={15} />
+              <span className="toggle-text">Compatta</span>
+            </button>
+            <button 
+              className={`view-toggle-btn ${viewMode === 'cards' ? 'active' : ''}`}
+              onClick={() => handleSetViewMode('cards')}
+              title="Vista a Schede"
+            >
+              <LayoutGrid size={15} />
+              <span className="toggle-text">Schede</span>
+            </button>
+            <button 
+              className={`view-toggle-btn ${viewMode === 'full' ? 'active' : ''}`}
+              onClick={() => handleSetViewMode('full')}
+              title="Vista Tabella Completa"
+            >
+              <Layers size={15} />
+              <span className="toggle-text">Completa</span>
+            </button>
+          </div>
+
+          <button className="primary add-btn-desktop" onClick={openAddModal}>
             <Plus size={18} /> Aggiungi Utenza
           </button>
         </div>
@@ -559,100 +1013,10 @@ function App() {
         {loading ? (
           <div style={{ padding: '2rem', textAlign: 'center' }}>Caricamento dati...</div>
         ) : (
-          <div className="table-responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th 
-                    className="sortable-th" 
-                    onClick={() => handleSort('username')} 
-                    title="Clicca per ordinare per Username"
-                  >
-                    <div className="th-content">
-                      <span>Username</span>
-                      {sortConfig.key === 'username' ? (
-                        sortConfig.direction === 'asc' ? <ArrowUp size={14} style={{ color: 'var(--accent)' }} /> : <ArrowDown size={14} style={{ color: 'var(--accent)' }} />
-                      ) : (
-                        <ArrowUpDown size={14} style={{ opacity: 0.3 }} />
-                      )}
-                    </div>
-                  </th>
-                  <th>Piano</th>
-                  <th 
-                    className="sortable-th" 
-                    onClick={() => handleSort('expireDate')} 
-                    title="Clicca per ordinare per Data di Scadenza"
-                  >
-                    <div className="th-content">
-                      <span>Scadenza</span>
-                      {sortConfig.key === 'expireDate' ? (
-                        sortConfig.direction === 'asc' ? <ArrowUp size={14} style={{ color: 'var(--accent)' }} /> : <ArrowDown size={14} style={{ color: 'var(--accent)' }} />
-                      ) : (
-                        <ArrowUpDown size={14} style={{ opacity: 0.3 }} />
-                      )}
-                    </div>
-                  </th>
-                  <th>Note</th>
-                  <th>Tipo Lista</th>
-                  <th 
-                    className="sortable-th" 
-                    onClick={() => handleSort('dueAmount')} 
-                    title="Clicca per ordinare per Da Pagare (mostra prima i valorizzati)"
-                  >
-                    <div className="th-content">
-                      <span>Da Pagare</span>
-                      {sortConfig.key === 'dueAmount' ? (
-                        sortConfig.direction === 'asc' ? <ArrowUp size={14} style={{ color: 'var(--accent)' }} /> : <ArrowDown size={14} style={{ color: 'var(--accent)' }} />
-                      ) : (
-                        <ArrowUpDown size={14} style={{ opacity: 0.3 }} />
-                      )}
-                    </div>
-                  </th>
-                  <th>Azioni</th>
-                </tr>
-              </thead>
-              <tbody>
-                {processedData.map((item, index) => {
-                  const expiring = isExpiring(item.expireDate);
-                  return (
-                    <tr key={item.id || index} className={expiring ? 'expiring' : ''}>
-                      <td style={{ fontWeight: 600 }}>{item.username}</td>
-                      <td>{item.plan}</td>
-                      <td className={expiring ? 'expiring-text' : ''}>
-                        {item.expireDate ? format(parseISO(item.expireDate), 'dd/MM/yyyy') : '-'}
-                        {expiring && <div className="status-badge status-danger" style={{ marginLeft: '0.5rem' }}>In scadenza</div>}
-                      </td>
-                      <td>{item.notes}</td>
-                      <td>{item.credits}</td>
-                      <td>
-                        {isValued(item.dueAmount) ? (
-                          <span className="due-badge">{item.dueAmount}</span>
-                        ) : (
-                          <span style={{ color: 'var(--text-secondary)' }}>-</span>
-                        )}
-                      </td>
-                      <td>
-                        <div className="action-buttons">
-                          <button className="icon-btn edit" title="Modifica" onClick={() => openEditModal(item)}>
-                            <Edit2 size={16} />
-                          </button>
-                          <button className="icon-btn delete" title="Elimina" onClick={() => deleteItem(item.id)}>
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-                {processedData.length === 0 && (
-                  <tr>
-                    <td colSpan="7" style={{ textAlign: 'center', padding: '2rem' }}>
-                      {searchTerm ? 'Nessun risultato corrispondente alla ricerca.' : 'Nessun dato presente.'}
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+          <div className="view-container">
+            {viewMode === 'compact' && renderCompactTable()}
+            {viewMode === 'cards' && renderCards()}
+            {viewMode === 'full' && renderFullTable()}
           </div>
         )}
       </div>
@@ -689,6 +1053,21 @@ function App() {
               <div className="form-group">
                 <label>Da Pagare (Avere)</label>
                 <input name="dueAmount" defaultValue={editingItem?.dueAmount} />
+              </div>
+              <div className="form-group">
+                <label>Gruppo Colorato (Excel)</label>
+                <select 
+                  name="group" 
+                  defaultValue={editingItem ? (editingItem.group || getUserGroup(editingItem.username)?.id || '') : ''}
+                  className="group-select"
+                >
+                  <option value="">-- Nessun Gruppo --</option>
+                  {USER_GROUPS.map(g => (
+                    <option key={g.id} value={g.id}>
+                      {g.label}
+                    </option>
+                  ))}
+                </select>
               </div>
               
               <div className="modal-actions">
@@ -738,6 +1117,44 @@ function App() {
           {toast.msg}
         </div>
       )}
+
+      {/* ── FAB: Add entry (mobile only, via CSS) ── */}
+      <button className="fab-add" onClick={openAddModal} title="Aggiungi Utenza">
+        <Plus size={26} />
+      </button>
+
+      {/* ── Bottom Navigation Bar (mobile only) ── */}
+      <nav className="bottom-nav">
+        <button
+          className={`bottom-nav-item${loading ? ' active' : ''}`}
+          onClick={() => fetchData(authToken)}
+          disabled={loading}
+        >
+          <RefreshCw size={22} style={loading ? { animation: 'spin 1s linear infinite' } : {}} />
+          <span>Ricarica</span>
+        </button>
+        <button
+          className="bottom-nav-item"
+          onClick={() => setShowSettings(true)}
+        >
+          <Settings size={22} />
+          <span>Config</span>
+        </button>
+        <button
+          className="bottom-nav-item"
+          onClick={exportExcel}
+        >
+          <Download size={22} />
+          <span>Excel</span>
+        </button>
+        <button
+          className="bottom-nav-item"
+          onClick={handleLogout}
+        >
+          <LogOut size={22} />
+          <span>Esci</span>
+        </button>
+      </nav>
     </div>
   );
 }
