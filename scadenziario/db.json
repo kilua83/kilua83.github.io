@@ -93,11 +93,12 @@
     "id": "salsc",
     "username": "salsc",
     "plan": "10 mese",
-    "expireDate": "2026-09-21T00:00:00.000",
+    "expireDate": "2027-08-21T00:00",
     "notes": "salvatore carabiniere",
-    "credits": null,
-    "dueAmount": "1 mese",
-    "remaining": null
+    "credits": "",
+    "dueAmount": "",
+    "remaining": null,
+    "group": "silver"
   },
   {
     "id": "rafaba",
