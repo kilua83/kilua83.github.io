@@ -154,11 +154,12 @@
     "id": "gianldes",
     "username": "gianldes",
     "plan": "5 mese",
-    "expireDate": "2026-09-20T00:00",
+    "expireDate": "2027-03-24T00:00",
     "notes": "",
     "credits": "no porno",
     "dueAmount": "",
-    "remaining": null
+    "remaining": null,
+    "group": "green"
   },
   {
     "id": "pignafrat",
