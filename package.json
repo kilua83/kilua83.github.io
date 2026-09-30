@@ -10,7 +10,7 @@
     "build:native": "vite build --base /",
     "lint": "oxlint",
     "preview": "vite preview",
-    "cap:sync": "npm run build:native && npx cap sync android",
+    "cap:sync": "npm run build:native && powershell -NoProfile -Command \"Copy-Item -Path 'dist\\*' -Destination 'android\\app\\src\\main\\assets\\public\\' -Recurse -Force\"",
     "cap:open": "npx cap open android"
   },
   "dependencies": {

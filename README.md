@@ -79,3 +79,47 @@ L'APK generato si troverà in `android/app/build/outputs/apk/debug/app-debug.apk
 
 ## 🔒 Sicurezza e Credenziali
 L'applicazione è protetta da schermata di login per evitare che il token personale GitHub venga esposto in chiaro. Il token viene conservato in modo protetto nel client e utilizzato unicamente per sincronizzare il database su GitHub.
+
+### Funzionalità di Autenticazione
+| Funzione | Web App | APK Android |
+|---|---|---|
+| **Ricordami** | ✅ Salva sessione in `localStorage` | ✅ Salva sessione in `localStorage` |
+| **Impronta digitale** | ❌ (non supportato nativamente) | ✅ Tramite `BiometricPrompt` Android |
+| **Auto-login all'avvio** | ✅ (con Ricordami attivo) | ✅ (con impronta o Ricordami) |
+| **Richiesta password su nuovo browser/dispositivo** | ✅ Sempre richiesta | ✅ Sempre richiesta |
+
+#### Come funziona il "Ricordami"
+- Alla prima sessione, spunta **"Ricordami su questo dispositivo"** (attivo di default) prima di premere **Accedi**.
+- Il token viene salvato in `localStorage` del browser/app: i successivi avvii non richiedono la password.
+- Cambiando browser o dispositivo, la password va reinserita.
+- **Logout** cancella completamente la sessione salvata.
+
+#### Come funziona l'Impronta Digitale (solo APK)
+- Alla prima sessione sull'APK, spunta **"Accesso con impronta digitale"** prima di accedere.
+- Nelle sessioni successive, l'app mostra automaticamente il prompt dell'impronta.
+- Abilitabile/disabilitabile anche nelle **Impostazioni** (icona ⚙️) dell'app.
+- Richiede che il dispositivo abbia almeno un'impronta registrata nelle impostazioni Android.
+
+---
+
+## 🛠️ Comandi Utili di Sviluppo
+
+| Comando | Descrizione |
+|---|---|
+| `npm run dev` | Avvia il server di sviluppo locale con Vite |
+| `npm run build:web` | Compila per GitHub Pages (base path `/scadenziario/`) |
+| `npm run build:native` | Compila per l'app mobile (base path `/`) |
+| `npm run cap:sync` | Compila per native e copia in `android/app/src/main/assets/public/` |
+| `npm run cap:open` | Apre il progetto in Android Studio |
+
+### Come compilare l'APK da terminale:
+```bash
+npm run cap:sync
+$env:ANDROID_HOME = "C:\Android\Sdk"
+$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
+$env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+cmd /c "cd /d android && gradlew.bat assembleDebug"
+```
+L'APK generato si troverà in `android/app/build/outputs/apk/debug/app-debug.apk`.
+
+---

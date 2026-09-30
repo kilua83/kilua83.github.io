@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { Settings, Download, Plus, Edit2, Trash2, X, ArrowUpDown, ArrowUp, ArrowDown, FileText, Search, DollarSign, AlertCircle, CloudOff, CloudUpload, Check, Lock, LogOut, User, RefreshCw, List, Bell, LayoutGrid, Table, Layers, Palette } from 'lucide-react';
+import { Settings, Download, Plus, Edit2, Trash2, X, ArrowUpDown, ArrowUp, ArrowDown, FileText, Search, DollarSign, AlertCircle, CloudOff, CloudUpload, Check, Lock, LogOut, User, RefreshCw, List, Bell, LayoutGrid, Table, Layers, Palette, Fingerprint } from 'lucide-react';
 import { format, differenceInDays, parseISO } from 'date-fns';
 import * as XLSX from 'xlsx';
-import { login, getSessionToken, getSessionUser, logout } from './auth';
+import { login, getSessionToken, getSessionUser, logout, hasSavedSession, getRememberPreference, isBiometricEnabled, setBiometricPreference, loginWithSavedToken } from './auth';
+import { checkBiometricAvailable, authenticateWithBiometrics } from './biometrics';
 import { USER_GROUPS, getUserGroup } from './groups';
 import './index.css';
 
@@ -14,6 +15,13 @@ function App() {
   const [currentUser, setCurrentUser] = useState(() => getSessionUser());
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
+  const [rememberMe, setRememberMe] = useState(() => getRememberPreference() || true);
+  const [enableBiometric, setEnableBiometric] = useState(() => isBiometricEnabled());
+  const [biometricAvailable, setBiometricAvailable] = useState(false);
+  const [hasSavedToken, setHasSavedToken] = useState(() => hasSavedSession());
+  const autoBioPromptAttempted = useRef(false);
+  // ref to latest handleBiometricUnlock, avoids circular init dependency
+  const handleBiometricUnlockRef = useRef(null);
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +34,20 @@ function App() {
     if (typeof window !== 'undefined' && window.Capacitor?.isNativePlatform?.()) {
       document.body.classList.add('is-native');
     }
+  }, []);
+
+  // Check biometric availability and auto-prompt if remembered & enabled
+  useEffect(() => {
+    checkBiometricAvailable().then((avail) => {
+      setBiometricAvailable(avail);
+      if (avail && hasSavedSession() && isBiometricEnabled() && !authToken && !autoBioPromptAttempted.current) {
+        autoBioPromptAttempted.current = true;
+        setTimeout(() => {
+          handleBiometricUnlockRef.current?.();
+        }, 350);
+      }
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
   // GitHub Settings
@@ -165,6 +187,46 @@ function App() {
     }
   }, [authToken, ghSettings.repo, ghSettings.path]);
 
+  const handleBiometricUnlock = useCallback(async () => {
+    setLoginError('');
+    setLoginLoading(true);
+    try {
+      const bioRes = await authenticateWithBiometrics({
+        title: "Scadenziario",
+        subtitle: "Appoggia il dito sul sensore d'impronta",
+        negativeButtonText: "Usa Password"
+      });
+
+      if (bioRes && bioRes.success) {
+        const res = loginWithSavedToken();
+        setLoginLoading(false);
+        if (res.success) {
+          setAuthToken(res.token);
+          setCurrentUser(res.user);
+          setGhSettings(prev => ({ ...prev, token: res.token }));
+          showToast(`Accesso biometrico autorizzato. Benvenuto ${res.user}!`);
+          fetchData(res.token);
+        } else {
+          setLoginError(res.error || 'Errore ripristino credenziali');
+        }
+      } else {
+        setLoginLoading(false);
+        if (bioRes && bioRes.error && !bioRes.error.toLowerCase().includes('annulla') && !bioRes.error.toLowerCase().includes('cancel')) {
+          setLoginError(bioRes.error);
+        }
+      }
+    } catch (err) {
+      setLoginLoading(false);
+      setLoginError("Errore durante l'autenticazione biometrica");
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchData]);
+
+  // Keep ref in sync so the auto-prompt useEffect can call the latest version
+  useEffect(() => {
+    handleBiometricUnlockRef.current = handleBiometricUnlock;
+  }, [handleBiometricUnlock]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoginError('');
@@ -172,13 +234,16 @@ function App() {
     const formData = new FormData(e.target);
     const user = formData.get('username') || '';
     const pass = formData.get('password') || '';
+    const remember = formData.get('remember') === 'on' || rememberMe;
+    const bio = biometricAvailable ? (formData.get('biometric') === 'on' || enableBiometric) : false;
 
-    const res = await login(user, pass);
+    const res = await login(user, pass, remember, bio);
     setLoginLoading(false);
 
     if (res.success) {
       setAuthToken(res.token);
       setCurrentUser(user);
+      setHasSavedToken(hasSavedSession());
       setGhSettings(prev => ({ ...prev, token: res.token }));
       showToast(`Benvenuto, ${user}!`);
       fetchData(res.token);
@@ -192,6 +257,7 @@ function App() {
       logout();
       setAuthToken(null);
       setCurrentUser(null);
+      setHasSavedToken(false);
       setData([]);
       setGhSettings(prev => ({ ...prev, token: '' }));
       showToast("Disconnessione effettuata");
@@ -442,27 +508,81 @@ function App() {
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="login-form">
+          {hasSavedToken && biometricAvailable && (
+            <div style={{ marginBottom: '1.25rem' }}>
+              <button 
+                type="button" 
+                className="login-biometric-btn" 
+                onClick={handleBiometricUnlock}
+                disabled={loginLoading}
+              >
+                <Fingerprint size={24} className="bio-icon-pulse" />
+                <span>Accedi con impronta digitale</span>
+              </button>
+              <div className="login-divider">
+                <span>oppure con password</span>
+              </div>
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} className="login-form" autoComplete="on">
             <div className="form-group">
-              <label>Username</label>
+              <label htmlFor="login-username">Username</label>
               <input 
+                id="login-username"
                 type="text" 
                 name="username" 
                 defaultValue="adigennaro" 
                 placeholder="es. adigennaro" 
+                autoComplete="username"
                 required 
                 autoFocus 
               />
             </div>
             <div className="form-group">
-              <label>Password</label>
+              <label htmlFor="login-password">Password</label>
               <input 
+                id="login-password"
                 type="password" 
                 name="password" 
                 placeholder="••••••••••••" 
+                autoComplete="current-password"
                 required 
               />
             </div>
+
+            <div className="login-options">
+              <label className="checkbox-row">
+                <input 
+                  type="checkbox" 
+                  name="remember" 
+                  checked={rememberMe} 
+                  onChange={(e) => setRememberMe(e.target.checked)} 
+                />
+                <div className="checkbox-label-text">
+                  <span>Ricordami su questo dispositivo</span>
+                  <small>Accesso automatico senza dover reinserire la password</small>
+                </div>
+              </label>
+
+              {biometricAvailable && (
+                <label className="checkbox-row">
+                  <input 
+                    type="checkbox" 
+                    name="biometric" 
+                    checked={enableBiometric} 
+                    onChange={(e) => setEnableBiometric(e.target.checked)} 
+                  />
+                  <div className="checkbox-label-text">
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <Fingerprint size={16} /> Accesso con impronta digitale
+                    </span>
+                    <small>Richiedi l'impronta biometrica ad ogni apertura</small>
+                  </div>
+                </label>
+              )}
+            </div>
+
             <button type="submit" className="login-submit-btn" disabled={loginLoading}>
               {loginLoading ? (
                 <>
@@ -1103,7 +1223,57 @@ function App() {
                 <label>Percorso File JSON</label>
                 <input name="path" defaultValue={ghSettings.path} required />
               </div>
-              <div className="modal-actions">
+
+              <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
+                  <Lock size={15} /> Sicurezza & Accesso
+                </h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <label className="checkbox-row">
+                    <input 
+                      type="checkbox" 
+                      checked={rememberMe} 
+                      onChange={(e) => {
+                        const val = e.target.checked;
+                        setRememberMe(val);
+                        if (!val) {
+                          localStorage.removeItem('scadenziario_remember_me');
+                        } else {
+                          localStorage.setItem('scadenziario_remember_me', 'true');
+                        }
+                        showToast(val ? 'Ricordami attivato' : 'Ricordami disattivato');
+                      }} 
+                    />
+                    <div className="checkbox-label-text">
+                      <span>Resta connesso su questo dispositivo</span>
+                      <small>Salva la sessione locale per non dover reinserire la password</small>
+                    </div>
+                  </label>
+
+                  {biometricAvailable && (
+                    <label className="checkbox-row">
+                      <input 
+                        type="checkbox" 
+                        checked={enableBiometric} 
+                        onChange={(e) => {
+                          const val = e.target.checked;
+                          setEnableBiometric(val);
+                          setBiometricPreference(val);
+                          showToast(val ? 'Impronta digitale abilitata' : 'Impronta digitale disabilitata');
+                        }} 
+                      />
+                      <div className="checkbox-label-text">
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <Fingerprint size={16} /> Accesso con impronta digitale
+                        </span>
+                        <small>Richiedi l'autenticazione biometrica all'apertura dell'app</small>
+                      </div>
+                    </label>
+                  )}
+                </div>
+              </div>
+
+              <div className="modal-actions" style={{ marginTop: '1.5rem' }}>
                 <button type="button" onClick={() => setShowSettings(false)}>Annulla</button>
                 <button type="submit" className="primary">Salva Impostazioni</button>
               </div>

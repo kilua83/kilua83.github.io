@@ -757,6 +757,125 @@ tr.expiring:hover {
   cursor: not-allowed;
 }
 
+/* Biometric & Remember Me additions */
+.login-biometric-btn {
+  width: 100%;
+  padding: 0.9rem 1.25rem;
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(99, 102, 241, 0.2));
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  color: #e0e7ff;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(129, 140, 248, 0.15);
+  margin-bottom: 1.25rem;
+}
+
+.login-biometric-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.25), rgba(99, 102, 241, 0.35));
+  border-color: rgba(167, 139, 250, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(129, 140, 248, 0.25);
+  color: #fff;
+}
+
+.login-biometric-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.login-biometric-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bio-icon-pulse {
+  color: #a78bfa;
+  animation: bio-pulse 2s infinite ease-in-out;
+}
+
+@keyframes bio-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+    filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.6));
+  }
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 1.25rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.login-divider span {
+  padding: 0 0.75rem;
+}
+
+.login-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: -0.25rem;
+  padding: 0.25rem 0;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: #6366f1;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.checkbox-label-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.checkbox-label-text span {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.checkbox-label-text small {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.3;
+}
+
 .logout-btn {
   background: rgba(239, 68, 68, 0.15);
   color: #fca5a5;
