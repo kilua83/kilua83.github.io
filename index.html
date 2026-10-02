@@ -1,13 +1,567 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scadenziario</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curriculum Vitae - Antonio Di Gennaro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #374151; /* Grigio scuro per il testo */
+        }
+        .section-title {
+            border-bottom: 2px solid #3b82f6; /* Blu */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1e3a8a; /* Blu scuro */
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tag {
+            background-color: #e0e7ff; /* Blu molto chiaro */
+            color: #3730a3; /* Blu indaco */
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        .icon {
+            margin-right: 0.5rem;
+            color: #3b82f6; /* Blu */
+        }
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); /* Gradiente blu */
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 2.5rem; /* Spazio per l'icona e la linea */
+            padding-bottom: 1.5rem;
+            border-left: 2px solid #93c5fd; /* Blu chiaro per la linea verticale */
+        }
+        .timeline-item:last-child {
+            border-left: 2px solid transparent; /* Nasconde l'ultima linea */
+            padding-bottom: 0;
+        }
+        .timeline-icon {
+            position: absolute;
+            left: -0.75rem; /* Centra l'icona sulla linea */
+            top: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background-color: #3b82f6; /* Blu */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #navbar {
+            transition: top 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <header class="text-white p-6 md:p-10 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+            <div class="text-center md:text-left mb-6 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold">Antonio Di Gennaro</h1>
+                <p class="text-xl md:text-2xl text-blue-200">ICT Project Manager & Systems Specialist</p>
+            </div>
+            <div class="flex-shrink-0">
+                <img src="fotoDiGennaro.jpg" 
+                     alt="Foto di Antonio Di Gennaro" 
+                     class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-blue-300 object-cover"
+                     onerror="this.onerror=null; this.src='https://placehold.co/150x150/3B82F6/FFFFFF?text=Foto&font=inter';">
+            </div>
+        </div>
+    </header>
+
+    <nav id="navbar" class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-2 md:space-y-0 md:space-x-6">
+                <a href="#about" class="text-gray-700 hover:text-blue-600 font-medium">Chi Sono</a>
+                <a href="#contact" class="text-gray-700 hover:text-blue-600 font-medium">Contatti</a>
+                <a href="#experience" class="text-gray-700 hover:text-blue-600 font-medium">Esperienze</a>
+                <a href="#projects" class="text-gray-700 hover:text-blue-600 font-medium">Progetti</a>
+                <a href="#education" class="text-gray-700 hover:text-blue-600 font-medium">Formazione</a>
+                <a href="#skills" class="text-gray-700 hover:text-blue-600 font-medium">Competenze</a>
+                <a href="#certifications" class="text-gray-700 hover:text-blue-600 font-medium">Certificazioni</a>
+                <a href="en/" class="md:ml-auto flex items-center gap-1.5 px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-full text-sm font-medium transition-colors duration-200">
+                    <i class="fas fa-globe"></i> EN
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-6">
+
+        <section id="about" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Chi Sono</h2>
+            <div class="card">
+                <div id="about-me-text">
+                    <p class="text-lg leading-relaxed">
+                        Come Project Manager e Infrastructure Architect con oltre 6 anni di esperienza, sono specializzato nella guida di progetti IT complessi e data-driven per diversi settori, tra cui la Pubblica Amministrazione e la Sanità. Il mio approccio combina visione strategica e profonda competenza tecnica: supervisiono meticolosamente ogni fase del progetto - dall'analisi dei requisiti alla consegna - garantendo una visione d'insieme e risultati di altissima qualità.
+                    </p>
+                    <p class="mt-4 text-lg leading-relaxed">
+                        Attualmente coordino un team tecnico di 6 professionisti specializzati e gestisco direttamente le relazioni chiave con clienti, fornitori e partner. Il mio obiettivo è progettare e fornire soluzioni sempre più sofisticate con una forte enfasi sull'osservabilità e l'affidabilità dei sistemi.
+                    </p>
+                    <p class="mt-4 text-lg leading-relaxed">
+                        Il mio background tecnico affonda le radici nella progettazione di architetture enterprise complesse. Ho un'ampia esperienza in: Assessment e Progettazione Infrastrutturale (Configurazione di architetture distribuite multilivello IaaS/PaaS in ambienti Cloud e On-Premises), High Availability (Integrazione di infrastrutture backend mission-critical e sistemi di clustering) e Sistemi Specializzati (Progettazione e gestione di Sistemi di Intercettazione Legale per i flussi di governance e sprint evolutivi).
+                    </p>
+                </div>
+                <p class="mt-4 text-lg font-semibold">Principali Clienti: CNH, ENEL, Ospedale Pascale, Ospedale Vanvitelli, Ospedale Federico II, Bulgari, IBM, Carpisa/Yamamay, Axa, IPZS e le Procure di Roma e Salerno.</p>
+            </div>
+        </section>
+
+        <section id="contact" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Contatti</h2>
+            <div class="card">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-lg mb-2"><i class="fas fa-map-marker-alt icon"></i>Via della Libertà, 140 - 80010 Villaricca (NA), Italia</p>
+                        <p class="text-lg mb-2"><i class="fas fa-phone icon"></i>(+39) 3490675187</p>
+                    </div>
+                    <div>
+                        <p class="text-lg mb-2"><i class="fas fa-envelope icon"></i><a href="mailto:digennaroantonio@gmail.com" class="text-blue-600 hover:underline">digennaroantonio@gmail.com</a></p>
+                        <p class="text-lg mb-2"><i class="fab fa-linkedin icon"></i><a href="https://www.linkedin.com/in/antonio-di-gennaro-5815903b/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Profilo LinkedIn</a></p>
+                    </div>
+                </div>
+                 <p class="mt-4 text-sm text-gray-600">Data di nascita: 8 Luglio 1983</p>
+                 <p class="text-sm text-gray-600">Nazionalità: Italiana</p>
+            </div>
+        </section>
+
+        <section id="experience" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Esperienze Lavorative</h2>
+            <div class="space-y-8">
+                <div class="card">
+                    <div class="timeline-item">
+                        <div class="timeline-icon"><i class="fas fa-briefcase"></i></div>
+                        <h3 class="text-xl font-semibold text-blue-700">Project Manager</h3>
+                        <p class="text-md text-gray-600">DigitalPlatforms S.p.A. | Napoli, Italia</p>
+                        <p class="text-sm text-gray-500 italic">Gennaio 2026 – Presente</p>
+                        <p class="mt-2 text-gray-700 text-sm">
+                            In qualità di Project Manager e Infrastructure Team Leader, guido la progettazione e l'implementazione di complesse architetture Cloud e Ibride, con un focus specifico sui settori della Pubblica Amministrazione e della Sanità. Gestisco l'erogazione di Managed Services, garantendo elevati standard di affidabilità, sicurezza e conformità in ambienti critici (PSN, OCI, Azure, VMWare).
+                        </p>
+                        <p class="mt-2 text-gray-700 text-sm font-semibold">Principali Responsabilità:</p>
+                        <ul class="list-disc list-inside mt-1 text-gray-700 text-sm space-y-1">
+                            <li>Conduzione parallela di progetti cloud e infrastrutturali per enti della Pubblica Amministrazione e della Sanità, implementando framework di osservabilità robusti e soluzioni data-centric.</li>
+                            <li>Supervisione dell'intero ciclo di vita dello sviluppo, garantendo il controllo di qualità dalla fase di progettazione fino al rilascio e al supporto post-implementazione.</li>
+                            <li>Sviluppo di strategie di budget e allocazione efficace delle risorse per raggiungere gli obiettivi di progetto nel rispetto dei vincoli di scopo e costo.</li>
+                            <li>Coordinamento dei team di ingegneria interni e gestione delle interfacce con i vendor esterni per assicurare il successo e l'allineamento del progetto.</li>
+                        </ul>
+                        <p class="mt-2 text-gray-700 text-sm font-semibold">Competenze Tecniche & Ambienti:</p>
+                        <ul class="list-disc list-inside mt-1 text-gray-700 text-sm space-y-1">
+                            <li>Specialista Azure, OCI, Infrastrutture VMWare, Integrazione PSN</li>
+                            <li>Amministrazione di Sistema (Linux & Windows), Gestione Server, Managed Services in ambienti Cloud</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="timeline-item">
+                        <div class="timeline-icon"><i class="fas fa-briefcase"></i></div>
+                        <h3 class="text-xl font-semibold text-blue-700">ICT Project Manager</h3>
+                        <p class="text-md text-gray-600">System Management SPA | Napoli, Italia</p>
+                        <p class="text-sm text-gray-500 italic">Novembre 2019 – Gennaio 2026</p>
+                        <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
+                            <li>Project Manager and Infrastructure Team Leader</li>
+                            <li>Managed Services</li>
+                            <li>Azure specialist</li>
+                            <li>System Administrator</li>
+                            <li>Server Management (Linux e Windows)</li>
+                            <li>Clustered services in Cloud Environments</li>
+                            <li>VMware vSphere Specialist</li>
+                            <li>Switching, Routing, Fortigate Firewall</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                     <div class="timeline-item">
+                        <div class="timeline-icon"><i class="fas fa-briefcase"></i></div>
+                        <h3 class="text-xl font-semibold text-blue-700">Systems Specialist</h3>
+                        <p class="text-md text-gray-600">System Management SPA | Napoli, Italia</p>
+                        <p class="text-sm text-gray-500 italic">Dicembre 2014 – Novembre 2019</p>
+                        <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
+                            <li>Information systems management</li>
+                            <li>System administrator</li>
+                            <li>Server Management (both Linux and Windows Server)</li>
+                            <li>VMWare vSphere Configuration and Administration (including vCenter clustered services)</li>
+                            <li>Cloud Services implementation (Azure, AWS, Openstack)</li>
+                            <li>Critical Multimedia Informations Managing Systems, in Lawful Interceptions scenarios</li>
+                            <li>Switching, Routing, Cisco ASA Firewall</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                     <div class="timeline-item">
+                        <div class="timeline-icon"><i class="fas fa-briefcase"></i></div>
+                        <h3 class="text-xl font-semibold text-blue-700">ICT System Administrator</h3>
+                        <p class="text-md text-gray-600">Tecnosoft Software Agency | Napoli, Italia</p>
+                        <p class="text-sm text-gray-500 italic">Marzo 2010 – Novembre 2014</p>
+                        <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
+                            <li>VMWare System Management</li>
+                            <li>Software Administration</li>
+                            <li>Server Configuration and Administration</li>
+                            <li>Mail services</li>
+                            <li>Linux (RedHat/CentOS - SLES) / Windows Servers</li>
+                            <li>MySQL and PostgreSQL</li>
+                            <li>Technical Support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Progetti Rilevanti</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Polo Strategico Nazionale -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Polo Strategico Nazionale - Progettazione e creazione infrastrutturale Federico II e Vanvitelli</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Aprile 2024 – Attuale</p>
+                    <p class="text-xs text-gray-500 mb-2 font-medium">DigitalPlatforms S.p.A.</p>
+                    <p class="text-gray-700 mb-3">Creazione dell'intero layer infrastrutturale (Sistemi e Rete) nel Polo Strategico Nazionale (PSN) per fungere da catalizzatore nel processo di trasformazione digitale, promuovendo l'innovazione e l'integrazione infrastrutturale a livello nazionale.</p>
+                    <p class="font-semibold text-gray-800 text-sm">Obiettivi:</p>
+                    <ul class="list-disc list-inside text-gray-700 text-xs mb-3 space-y-1">
+                        <li>Stabilire una rete infrastrutturale robusta e scalabile che supporti l'evoluzione tecnologica.</li>
+                        <li>Incoraggiare la collaborazione tra enti pubblici, aziende private e istituzioni accademiche per accelerare lo sviluppo di soluzioni innovative.</li>
+                        <li>Ridurre il digital divide e promuovere un accesso equo alla tecnologia in tutta la nazione.</li>
+                        <li>Implementazione di una piattaforma integrata per la gestione e l'analisi dei dati, migliorando il processo decisionale basato sull'evidenza.</li>
+                        <li>Sviluppo di progetti pilota per testare nuove tecnologie in ambienti controllati prima del deployment su larga scala.</li>
+                    </ul>
+                    <p class="font-semibold text-gray-800 text-sm">Dettagli Attività di Progetto:</p>
+                    <ul class="list-disc list-inside text-gray-700 text-xs mb-3 space-y-1">
+                        <li>Analisi e progettazione della rete infrastrutturale.</li>
+                        <li>Valutazione delle esigenze infrastrutturali attuali e future.</li>
+                        <li>Progettazione della rete di comunicazione.</li>
+                        <li>Definizione di standard tecnologici per garantire compatibilità e scalabilità.</li>
+                        <li>Sviluppo di un'architettura cloud per la raccolta, memorizzazione e analisi dei dati.</li>
+                        <li>Creazione di modelli di calcolo per l'elaborazione dei dati.</li>
+                        <li>Implementazione di misure di sicurezza per proteggere i dati sensibili.</li>
+                        <li>Implementazione di sistemi di monitoraggio.</li>
+                        <li>Analisi periodica per valutare l'efficacia delle soluzioni adottate.</li>
+                        <li>Reporting dettagliato per informare gli stakeholder e guidare le decisioni future.</li>
+                        <li>Aggiornamento continuo per mantenere l'allineamento con i trend tecnologici globali.</li>
+                    </ul>
+                    <p class="font-semibold text-gray-800 text-sm">Competenze:</p>
+                    <div class="mt-1">
+                        <span class="tag">Network File System (NFS)</span><span class="tag">Networking</span><span class="tag">Active Directory</span><span class="tag">VMware vSphere</span><span class="tag">IaaS</span><span class="tag">Linux System Administration</span><span class="tag">PaaS</span><span class="tag">Windows Server</span><span class="tag">Vcloud</span><span class="tag">BaaS</span><span class="tag">Firewall</span><span class="tag">DRaaS</span>
+                    </div>
+                </div>
+
+                <!-- Sisal -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Sisal - Progetto Totofoot 12 e Totofoot 14 Marocco</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Ottobre 2023 – Giugno 2024</p>
+                    <p class="text-xs text-gray-500 mb-2 font-medium">System Management S.p.A.</p>
+                    <p class="text-gray-700 mb-3">Creazione della soluzione cloud Azure dell'ambiente di test e di collaudo dei nuovi sistemi di gioco in Marocco "Totofoot 12" e "Totofoot 14". Progettazione e configurazione VPN Gateway come soluzione Azure per la creazione di un tunnel IPSec verso i sistemi esterni Sisal. Creazione e configurazione Cluster Kubernetes in Azure.</p>
+                    <p class="font-semibold text-gray-800 text-sm">Competenze:</p>
+                    <div class="mt-1">
+                        <span class="tag">Kubernetes</span><span class="tag">Azure</span><span class="tag">VPN Gateway</span>
+                    </div>
+                </div>
+
+                <!-- Active Directory synchronization -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Active Directory synchronization with Azure Entra ID</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Gennaio 2024 – Aprile 2024</p>
+                    <p class="text-xs text-gray-500 mb-2 font-medium">System Management S.p.A.</p>
+                    <p class="text-gray-700 mb-3">Implementazione di una soluzione di sincronizzazione tra Active Directory on-premises e Azure Entra ID per garantire una gestione degli accessi sicura e centralizzata.</p>
+                    <p class="font-semibold text-gray-800 text-sm">Obiettivi:</p>
+                    <ul class="list-disc list-inside text-gray-700 text-sm mb-3">
+                        <li>Integrazione fluida di Active Directory con Azure Entra ID.</li>
+                        <li>Sicurezza migliorata con autenticazione multi-fattore e policy di accesso condizionale.</li>
+                        <li>Automazione dei processi di onboarding e offboarding dei dipendenti.</li>
+                    </ul>
+                    <p class="font-semibold text-gray-800 text-sm">Competenze:</p>
+                    <div class="mt-1">
+                        <span class="tag">Active Directory</span><span class="tag">Microsoft 365</span><span class="tag">Azure Entra ID</span><span class="tag">Azure</span><span class="tag">Azure Entra Connect</span>
+                    </div>
+                </div>
+
+                <!-- Disaster Recovery -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Disaster Recovery of an on-premise environment on Azure cloud infrastructure</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Marzo 2023 – Dicembre 2023</p>
+                    <p class="text-xs text-gray-500 mb-2 font-medium">System Management S.p.A.</p>
+                    <p class="text-gray-700 mb-3">Configurazione e piano di disaster recovery tramite Veeam Backup and Replication 12. Backup di VM in ambiente vSphere on-premise su Azure blob storage (scale out). Creazione VPN site-to-site per la raggiungibilità dell'ambiente cloud in caso di attivazione DR.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> Senior IT Architect and operations</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie:</p>
+                    <div class="mt-1">
+                        <span class="tag">Veeam B&R 12</span><span class="tag">Azure</span><span class="tag">VPN</span><span class="tag">vSphere</span>
+                    </div>
+                </div>
+
+                <!-- Ospedale Vanvitelli -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Creation of the entire Infrastructure of "Ospedale Vanvitelli Primo Policlinico" in Canonical Openstack Cloud</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Marzo 2019 – Dicembre 2023</p>
+                    <p class="text-xs text-gray-500 mb-2 font-medium">System Management S.p.A.</p>
+                    <p class="text-gray-700 mb-3">Definizione delle specifiche di progetto e implementazione dell'infrastruttura Cloud al fine di migrare tutte le infrastrutture fisiche in virtuali. Implementazione di piani di migrazione e migrazione di sistemi "on-premise" verso il sistema "cloud". Progettazione, implementazione e gestione del Firewall virtuale (Fortinet) provisionato sul Cloud.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> Senior IT Architect and operations</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie / Competenze:</p>
+                    <div class="mt-1">
+                        <span class="tag">Openstack</span><span class="tag">Linux System Administration</span><span class="tag">Windows Server</span><span class="tag">Routing</span><span class="tag">Fortigate Firewall</span>
+                    </div>
+                </div>
+
+                <!-- IPZS Consultant -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">IPZS Consultant and system support</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Maggio 2021 – Marzo 2023</p>
+                    <p class="text-xs text-gray-500 mb-2 font-medium">System Management S.p.A.</p>
+                    <p class="text-gray-700 mb-3">Supporto sistemistico su ambienti di sviluppo, test, pre-produzione e produzione. I deployment e i rilasci vengono eseguiti tramite playbook ansible, configurando web server e application server.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> Senior specialist and operations</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie:</p>
+                    <div class="mt-1">
+                        <span class="tag">apache proxy httpd</span><span class="tag">tomcat</span><span class="tag">TLS certificates</span><span class="tag">ansible</span><span class="tag">git</span><span class="tag">docker</span><span class="tag">Shibboleth IdP/SP</span>
+                    </div>
+                </div>
+
+                <!-- Nagios XI Capacity Plan -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Nagios XI Capacity Plan</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Settembre 2022 – Marzo 2023</p>
+                    <p class="text-xs text-gray-500 mb-2 font-medium">System Management S.p.A.</p>
+                    <p class="text-gray-700 mb-3">Creazione del sistema di monitoraggio basato su Nagios XI per il monitoraggio dei servizi on-premise e cloud; gestione e configurazione del sistema di capacity plan per la previsione del consumo di risorse. Customizzazione tramite l'uso delle API Nagios di una dashboard contenente dati storici e previsionali secondo le specifiche del cliente.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> Project Manager and Team leader</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie:</p>
+                    <div class="mt-1">
+                        <span class="tag">Nagios XI</span><span class="tag">Embedded Capacity Planning feature</span><span class="tag">NCPA Agent</span><span class="tag">Nagios api</span>
+                    </div>
+                </div>
+
+                <!-- VMWare vCloud Apps -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Creation and management of VMWare vCloud Apps in cloud environment</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Giugno 2019 – Dicembre 2021</p>
+                    <p class="text-xs text-gray-500 mb-2 font-medium">System Management S.p.A.</p>
+                    <p class="text-gray-700 mb-3">Definizione e implementazione dell'infrastruttura Cloud in ambiente vCloud Director per applicazioni web e mobile in configurazione cluster. Gestione della rete e sicurezza delle applicazioni cloud.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> Senior IT Architect and operations</p>
+                    <p class="font-semibold text-gray-800 mt-2">Competenze:</p>
+                    <div class="mt-1">
+                        <span class="tag">VMware vSphere</span><span class="tag">Linux System Administration</span><span class="tag">Windows Server</span><span class="tag">Vcloud</span>
+                    </div>
+                </div>
+
+                <!-- Istituto Nazionale Tumori -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Creation of the entire Infrastructure of "Istituto Nazionale Tumori IRCCS Fondazione Pascale" in Canonical Openstack Cloud</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Gennaio 2018 – Febbraio 2019</p>
+                    <p class="text-xs text-gray-500 mb-2 font-medium">System Management S.p.A.</p>
+                    <p class="text-gray-700 mb-3">Definizione delle specifiche di progetto e realizzazione dell'infrastruttura Cloud al fine di migrare tutte le infrastrutture fisiche in virtuali. Realizzazione di piani di migrazione e migrazione dei sistemi "on-premise" verso il sistema "cloud". Progettazione, implementazione e gestione del Firewall virtuale (Fortinet) presente sul Cloud.</p>
+                    <p class="font-semibold text-gray-800 text-sm">Tecnologie:</p>
+                    <div class="mt-1">
+                        <span class="tag">Openstack</span><span class="tag">Linux/Windows servers</span><span class="tag">deployed services</span><span class="tag">Routing</span><span class="tag">Fortigate Firewall</span>
+                    </div>
+                </div>
+
+                <!-- Nagios Monitoring -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Nagios Monitoring of Critical Multimedia Informations Managing Systems, in Lawful Interceptions scenarios</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Settembre 2016 – Gennaio 2019</p>
+                    <p class="text-xs text-gray-500 mb-2 font-medium">System Management S.p.A.</p>
+                    <p class="text-gray-700 mb-3">Implementazione del sistema di monitoraggio Nagios su piattaforme business critical.</p>
+                    <p class="font-semibold text-gray-800 text-sm">Tecnologie:</p>
+                    <div class="mt-1">
+                        <span class="tag">WebServer Apache</span><span class="tag">Nagios</span><span class="tag">xml</span><span class="tag">bash scripting</span>
+                    </div>
+                </div>
+
+                <!-- Shibboleth Service Provider -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Shibboleth Service Provider integration with Microsoft ADFS Identity Provider using SAML Protocol</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Ottobre 2017 – Novembre 2018</p>
+                    <p class="text-xs text-gray-500 mb-2 font-medium">System Management S.p.A.</p>
+                    <p class="text-gray-700 mb-3">Integrazione con un'applicazione in grado di utilizzare il framework Shibboleth: standard di sicurezza aperto con licenza Apache 2 e basato su SAML. ADFS assume il ruolo di Identity Provider (IdP) fornendo informazioni sull'utente, mentre l'applicazione agisce come Service Provider (SP). Configurazione di Relying Party Trust per ciascuna applicazione web con regole di attestazione (Claim Rules).</p>
+                    <p class="font-semibold text-gray-800 text-sm">Competenze:</p>
+                    <div class="mt-1">
+                        <span class="tag">adfs</span><span class="tag">Shibboleth</span><span class="tag">Active Directory</span><span class="tag">SAML</span>
+                    </div>
+                </div>
+
+                <!-- Clustering of mobile services -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Clustering of mobile services in cloud environments</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Settembre 2015 – Dicembre 2017</p>
+                    <p class="text-xs text-gray-500 mb-2 font-medium">System Management S.p.A.</p>
+                    <p class="text-gray-700 mb-3">Creazione e implementazione di un sistema di clustering per servizi mobili in ambienti Linux. Gestione di servizi basati su cloud (Piattaforma SmartShop©), relativi a scenari B2B e B2C.</p>
+                    <p class="text-gray-700"><span class="font-semibold">Ruolo:</span> specialist, operations and maintenance</p>
+                    <p class="font-semibold text-gray-800 mt-2">Tecnologie:</p>
+                    <div class="mt-1">
+                        <span class="tag">IBM WebSphere</span><span class="tag">IBM MobileFirst Platform</span><span class="tag">Keepalived</span><span class="tag">HAProxy</span><span class="tag">Apache Proxy</span><span class="tag">Apache LoadBalancer</span><span class="tag">Galera MariaDB</span>
+                    </div>
+                </div>
+
+                <!-- Migration of Lawful Interception -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Migration of Lawful Interception System</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Agosto 2016 – Novembre 2016</p>
+                    <p class="text-xs text-gray-500 mb-2 font-medium">System Management S.p.A.</p>
+                    <p class="text-gray-700 mb-3">Migrazione dell'intera piattaforma (server e servizi) verso una nuova infrastruttura e gestione del processo di manutenzione.</p>
+                    <p class="font-semibold text-gray-800 text-sm">Tecnologie:</p>
+                    <div class="mt-1">
+                        <span class="tag">VMWare vCenter</span><span class="tag">vSwitch</span><span class="tag">Networking</span><span class="tag">IBM DS Series Storage</span><span class="tag">IBM v3700 Storage</span>
+                    </div>
+                </div>
+
+                <!-- LitSolution -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-1">Software Services virtualization: LitSolution project</h3>
+                    <p class="text-sm text-gray-500 italic mb-2">Marzo 2012 – Luglio 2014</p>
+                    <p class="text-xs text-gray-500 mb-2 font-medium">Tecnosoft Software Agency</p>
+                    <p class="text-gray-700 mb-3">Soluzione di Virtual Desktop Infrastructure (VDI) ad alte prestazioni. Sviluppo di uno strumento di virtualizzazione completo progettato per sostituire le workstation fisiche utilizzando protocolli di connettività sofisticati per garantire un accesso sicuro su tutte le piattaforme (PC, iPad, Notebook, Smartphone, Linux e Android).</p>
+                    <p class="font-semibold text-gray-800 text-sm">Caratteristiche chiave:</p>
+                    <ul class="list-disc list-inside text-gray-700 text-xs mb-3 space-y-1">
+                        <li>Ottimizzazione per bassa larghezza di banda: utilizzo di algoritmi avanzati di compressione dati per garantire alta velocità anche su reti mobili o connessioni limitate.</li>
+                        <li>Roaming di sessione in tempo reale: passaggio continuo da un dispositivo all'altro per riprendere il lavoro esattamente da dove era stato interrotto, senza ritardi di sincronizzazione.</li>
+                    </ul>
+                    <p class="font-semibold text-gray-800 text-sm">Benefici chiave:</p>
+                    <ul class="list-disc list-inside text-gray-700 text-xs mb-3 space-y-1">
+                        <li>Zero obsolescenza hardware: disaccoppiamento del software dai vincoli dell'hardware fisico.</li>
+                        <li>Gestione centralizzata: aggiornamenti e manutenzione semplificati.</li>
+                        <li>Sicurezza e recupero dati: nessuna perdita di dati; in caso di furto del dispositivo, riconnessione istantanea e ripresa delle operazioni da un nuovo terminale.</li>
+                        <li>Collaborazione e alte prestazioni.</li>
+                    </ul>
+                    <p class="font-semibold text-gray-800 text-sm">Tecnologie:</p>
+                    <div class="mt-1">
+                        <span class="tag">VMWare vCenter</span><span class="tag">VMWare view (Horizon)</span><span class="tag">Windows Active Directory</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="education" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Formazione</h2>
+            <div class="space-y-6">
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700">European Master on Critical Networked Systems</h3>
+                    <p class="text-md text-gray-600">Università degli studi Parthenope di Napoli</p>
+                    <p class="text-sm text-gray-500 italic">Settembre 2009 – Luglio 2010</p>
+                    <p class="mt-1 text-gray-700">Tesi: Data Center Security and Service Availability: an Architectural Model for secure service supply.</p>
+                    <p class="mt-1 text-gray-700">Focus: ICT Security, SCADA systems, Ethical Hacking, RFID, Information Security, Wireless Sensors.</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-700">Laurea Triennale in Ingegneria Informatica</h3>
+                    <p class="text-md text-gray-600">Seconda Università degli studi di Napoli</p>
+                    <p class="text-sm text-gray-500 italic">Settembre 2003 – Dicembre 2008</p>
+                    <p class="mt-1 text-gray-700">Tesi: Tecniche di allocazione risorse e scheduling di cluster di PC.</p>
+                    <p class="mt-1 text-gray-700">Focus: Linguaggi di programmazione (C++, Java, Assembler), Networking.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Competenze Digitali</h2>
+            <div class="card">
+                <div class="flex flex-wrap">
+                    <span class="tag">Windows / Windows Server</span><span class="tag">Linux (Ubuntu, RedHat, Opensuse, CentOS)</span>
+                    <span class="tag">VMware vSphere 5.x, 6.x, 7.x</span><span class="tag">Firewall (Fortinet)</span>
+                    <span class="tag">Cisco Switches</span><span class="tag">Openstack</span><span class="tag">IBM v3700 Storage</span>
+                    <span class="tag">Ansible</span><span class="tag">LAMP</span><span class="tag">Apache httpd</span><span class="tag">Git/Svn</span>
+                    <span class="tag">HPE Storage</span><span class="tag">Veeam Backup and Replication</span><span class="tag">IBM DS Series Storage</span>
+                    <span class="tag">PHP (Basics)</span><span class="tag">Bash scripting (Basics)</span><span class="tag">Azure Portal</span>
+                    <span class="tag">Azure Entra ID</span><span class="tag">Active Directory</span><span class="tag">Nagios XI / Nagios Core</span>
+                    <span class="tag">Docker, Docker-compose</span><span class="tag">Kubernetes (Basics)</span>
+                    <span class="tag">Databases (MySQL, MSSQL, Oracle, PostgreSQL)</span>
+                    <span class="tag">CMS (Wordpress, Joomla)</span>
+                </div>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mt-8 mb-4">Competenze Linguistiche</h3>
+            <div class="card">
+                 <p class="text-lg"><span class="font-semibold">Madrelingua:</span> Italiano</p>
+                 <div class="mt-2">
+                    <p class="text-lg font-semibold">Inglese:</p>
+                    <ul class="list-inside list-disc text-gray-700">
+                        <li>Ascolto: B1</li>
+                        <li>Lettura: C1</li>
+                        <li>Scrittura: C1</li>
+                        <li>Produzione Orale: B1</li>
+                        <li>Interazione Orale: B1</li>
+                    </ul>
+                 </div>
+            </div>
+        </section>
+
+        <section id="certifications" class="mb-12 scroll-mt-20">
+            <h2 class="section-title">Certificazioni</h2>
+            <div class="card">
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>VCP 7 - VMWare Certified Professional 7</li>
+                    <li>Netasq Firewall V9 Admin Certification</li>
+                    <li>AXIS Communications accademy video solutions fundamentals level 2</li>
+                    <li>First Step Lead Auditor ISO 27001</li>
+                    <li>Huawei Specialist Certification - IP Network (Security) Presales Specialist </li>
+                    <li>VMWare VTSP 5.5 - VMWare Technical Solution Professional 5.5</li>
+                    <li>VMWare VSP 2015 - VMWare Solution Professional</li>
+                    <li>VMWare VTSP - NV - VMWare Technical Solution Professional - Network Virtualization 1.0</li>
+                    <li>VMWare VSP - NV - VMWare Solution Professional - Network Virtualization 1.0</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white text-center p-6 mt-12">
+        <p>&copy; <span id="currentYear"></span> Antonio Di Gennaro. Tutti i diritti riservati.</p>
+        <p class="text-sm text-gray-400 mt-1">Autorizzo il trattamento dei dati personali ai sensi del D. Lgs. 196/03 e del GDPR (Regolamento UE 2016/679).</p>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Set current year in footer
+        const currentYearElement = document.getElementById('currentYear');
+        if (currentYearElement) {
+            currentYearElement.textContent = new Date().getFullYear();
+        }
+        
+
+        // Sticky navbar logic
+        let lastScrollTop = 0;
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (navbar) {
+                if (scrollTop > lastScrollTop && scrollTop > navbar.offsetHeight + 50) { // Scroll Down and past a certain point
+                    navbar.style.top = '-80px'; // Hide navbar
+                } else { // Scroll Up
+                    navbar.style.top = '0';
+                }
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
+        });
+
+    </script>
+
+</body>
 </html>

@@ -23,11 +23,12 @@
     "id": "giacri",
     "username": "giacri",
     "plan": "50 semestre",
-    "expireDate": "2027-02-12T00:00:00.000",
+    "expireDate": "2027-02-12T00:00",
     "notes": "gianluca cristiano ",
-    "credits": null,
-    "dueAmount": 50,
-    "remaining": null
+    "credits": "",
+    "dueAmount": "",
+    "remaining": null,
+    "group": "orange"
   },
   {
     "id": "framarcar",
@@ -53,20 +54,20 @@
     "id": "diabolik81",
     "username": "diabolik81",
     "plan": "50 semestre",
-    "expireDate": "2027-04-13T00:00:00.000",
+    "expireDate": "2027-04-13T00:00",
     "notes": "marino auto cugino framarcar",
-    "credits": "nop",
-    "dueAmount": null,
+    "credits": "no porno",
+    "dueAmount": "",
     "remaining": null
   },
   {
     "id": "donatoc",
     "username": "donatoc",
     "plan": "50 semestre ",
-    "expireDate": "2027-04-13T00:00:00.000",
+    "expireDate": "2027-04-13T00:00",
     "notes": "padre marino auto diabolik81",
-    "credits": "nop",
-    "dueAmount": null,
+    "credits": "no porno",
+    "dueAmount": "",
     "remaining": null
   },
   {
@@ -93,20 +94,21 @@
     "id": "salsc",
     "username": "salsc",
     "plan": "10 mese",
-    "expireDate": "2026-09-21T00:00:00.000",
+    "expireDate": "2027-08-21T00:00",
     "notes": "salvatore carabiniere",
-    "credits": null,
-    "dueAmount": "1 mese",
-    "remaining": null
+    "credits": "",
+    "dueAmount": "",
+    "remaining": null,
+    "group": "silver"
   },
   {
     "id": "rafaba",
     "username": "rafaba",
     "plan": "50 semestre",
-    "expireDate": "2026-09-22T00:00:00.000",
+    "expireDate": "2027-03-22T00:00",
     "notes": "Raffaele Abate",
-    "credits": null,
-    "dueAmount": "1 mese",
+    "credits": "",
+    "dueAmount": "",
     "remaining": null
   },
   {
@@ -153,11 +155,12 @@
     "id": "gianldes",
     "username": "gianldes",
     "plan": "5 mese",
-    "expireDate": "2026-09-20T00:00:00.000",
-    "notes": null,
-    "credits": "nop",
-    "dueAmount": null,
-    "remaining": null
+    "expireDate": "2027-03-24T00:00",
+    "notes": "",
+    "credits": "no porno",
+    "dueAmount": "",
+    "remaining": null,
+    "group": "green"
   },
   {
     "id": "pignafrat",
@@ -183,11 +186,12 @@
     "id": "menzio",
     "username": "menzio",
     "plan": "5 mese",
-    "expireDate": "2026-09-27T00:00:00.000",
-    "notes": null,
-    "credits": null,
-    "dueAmount": null,
-    "remaining": null
+    "expireDate": "2027-01-30T00:00",
+    "notes": "",
+    "credits": "",
+    "dueAmount": "",
+    "remaining": null,
+    "group": "green"
   },
   {
     "id": "men2",
@@ -223,40 +227,40 @@
     "id": "redsca",
     "username": "redsca",
     "plan": "9 mese",
-    "expireDate": "2026-10-01T00:00:00.000",
+    "expireDate": "2026-11-01T00:00",
     "notes": "scarpati 9 al mese",
-    "credits": null,
-    "dueAmount": "1 mese",
+    "credits": "",
+    "dueAmount": "",
     "remaining": null
   },
   {
     "id": "redsca2",
     "username": "redsca2",
     "plan": "9 mese",
-    "expireDate": "2026-10-10T00:00:00.000",
+    "expireDate": "2026-10-10T00:00",
     "notes": "scarpati2 9 al mese",
-    "credits": null,
-    "dueAmount": "1 mese",
+    "credits": "",
+    "dueAmount": "",
     "remaining": null
   },
   {
     "id": "redbros",
     "username": "redbros",
     "plan": "9 mese",
-    "expireDate": "2027-09-13T00:00:00.000",
+    "expireDate": "2027-09-13T00:00",
     "notes": "amico scarpati",
-    "credits": null,
-    "dueAmount": 120,
+    "credits": "",
+    "dueAmount": "",
     "remaining": null
   },
   {
     "id": "redbros2",
     "username": "redbros2",
     "plan": "9 mese",
-    "expireDate": "2027-09-13T00:00:00.000",
+    "expireDate": "2027-09-13T00:00",
     "notes": "amico scarpati 2",
-    "credits": null,
-    "dueAmount": 120,
+    "credits": "",
+    "dueAmount": "",
     "remaining": null
   },
   {
@@ -290,16 +294,6 @@
     "remaining": null
   },
   {
-    "id": "mattalba",
-    "username": "mattalba",
-    "plan": null,
-    "expireDate": "2025-06-14T00:00:00.000",
-    "notes": null,
-    "credits": null,
-    "dueAmount": null,
-    "remaining": null
-  },
-  {
     "id": "galba2",
     "username": "galba2",
     "plan": null,
@@ -312,11 +306,11 @@
   {
     "id": "pesan",
     "username": "pesan",
-    "plan": null,
-    "expireDate": "2025-03-07T00:00:00.000",
-    "notes": null,
-    "credits": null,
-    "dueAmount": null,
+    "plan": "",
+    "expireDate": "2026-04-07T00:00",
+    "notes": "",
+    "credits": "",
+    "dueAmount": "",
     "remaining": null
   },
   {
@@ -328,5 +322,60 @@
     "credits": null,
     "dueAmount": null,
     "remaining": null
+  },
+  {
+    "id": "1789707713118",
+    "username": "sorry",
+    "plan": "",
+    "expireDate": "2026-09-22T00:00",
+    "notes": "",
+    "credits": "",
+    "dueAmount": "",
+    "remaining": null,
+    "group": "yellow"
+  },
+  {
+    "id": "1789707742644",
+    "username": "panic",
+    "plan": "",
+    "expireDate": "2026-10-13T00:00",
+    "notes": "",
+    "credits": "",
+    "dueAmount": "",
+    "remaining": null,
+    "group": "yellow"
+  },
+  {
+    "id": "1789712783178",
+    "username": "mattalba",
+    "plan": "",
+    "expireDate": "2025-09-18T08:26",
+    "notes": "",
+    "credits": "",
+    "dueAmount": "",
+    "remaining": null,
+    "group": "yellow"
+  },
+  {
+    "id": "1790747247788",
+    "username": "fcorn",
+    "plan": "50 semestre",
+    "expireDate": "2026-10-29T20:00",
+    "notes": "cornevilli",
+    "credits": "no porno",
+    "dueAmount": "",
+    "remaining": null,
+    "group": "yellow"
+  },
+  {
+    "id": "1790747358799",
+    "username": "giuros",
+    "plan": "",
+    "expireDate": "2026-10-21T13:22",
+    "notes": "rosetti",
+    "credits": "",
+    "dueAmount": "",
+    "remaining": null,
+    "group": "yellow"
   }
 ]
