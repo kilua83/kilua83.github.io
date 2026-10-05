@@ -3,11 +3,12 @@
     "id": "umbgcrist",
     "username": "umbgcrist",
     "plan": "10 mese ",
-    "expireDate": "2026-10-05T00:00:00.000",
+    "expireDate": "2026-12-05T00:00",
     "notes": "gcrist suocero (padre Umberto) ",
-    "credits": null,
-    "dueAmount": null,
-    "remaining": null
+    "credits": "",
+    "dueAmount": "40",
+    "remaining": null,
+    "group": "orange"
   },
   {
     "id": "Umbsuocgcrist",
