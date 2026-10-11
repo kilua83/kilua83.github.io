@@ -229,11 +229,12 @@
     "id": "redsca",
     "username": "redsca",
     "plan": "9 mese",
-    "expireDate": "2026-11-01T00:00",
+    "expireDate": "2027-11-01T00:00",
     "notes": "scarpati 9 al mese",
     "credits": "",
     "dueAmount": "",
-    "remaining": null
+    "remaining": null,
+    "group": "rust"
   },
   {
     "id": "redsca2",
