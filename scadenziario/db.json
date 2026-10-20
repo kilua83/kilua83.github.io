@@ -280,12 +280,13 @@
   {
     "id": "egida",
     "username": "egida",
-    "plan": null,
-    "expireDate": "2025-12-23T00:00:00.000",
-    "notes": null,
-    "credits": null,
-    "dueAmount": null,
-    "remaining": null
+    "plan": "",
+    "expireDate": "2026-11-20T00:00",
+    "notes": "",
+    "credits": "",
+    "dueAmount": "",
+    "remaining": null,
+    "group": "yellow"
   },
   {
     "id": "bobparen",
