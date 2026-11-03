@@ -126,12 +126,13 @@
   {
     "id": "mauriziofrut",
     "username": "mauriziofrut",
-    "plan": "50 semestre ",
-    "expireDate": "2026-11-05T00:00:00.000",
-    "notes": null,
-    "credits": null,
-    "dueAmount": null,
-    "remaining": null
+    "plan": "10 mese",
+    "expireDate": "2027-04-05T00:00",
+    "notes": "",
+    "credits": "",
+    "dueAmount": "50",
+    "remaining": null,
+    "group": "peach"
   },
   {
     "id": "maurizio2",
