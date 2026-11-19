@@ -170,11 +170,12 @@
     "id": "pignafrat",
     "username": "pignafrat",
     "plan": "5 mese",
-    "expireDate": "2026-11-27T00:00:00.000",
+    "expireDate": "2027-11-27T00:00",
     "notes": "marco",
-    "credits": null,
-    "dueAmount": null,
-    "remaining": null
+    "credits": "",
+    "dueAmount": "",
+    "remaining": null,
+    "group": "green"
   },
   {
     "id": "maremoto1",
