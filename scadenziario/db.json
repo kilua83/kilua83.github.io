@@ -294,12 +294,13 @@
   {
     "id": "bobparen",
     "username": "bobparen",
-    "plan": null,
-    "expireDate": "2026-11-11T00:00:00.000",
-    "notes": null,
-    "credits": null,
-    "dueAmount": null,
-    "remaining": null
+    "plan": "",
+    "expireDate": "2027-02-19T00:00",
+    "notes": "",
+    "credits": "",
+    "dueAmount": "",
+    "remaining": null,
+    "group": "yellow"
   },
   {
     "id": "galba2",
